@@ -3,4 +3,4 @@ project(Mint)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(Mint src/main.cpp)
+add_executable(Mint src/main.cpp src/Mint.cpp src/Mint.h)
