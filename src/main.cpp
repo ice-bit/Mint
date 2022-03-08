@@ -1,12 +1,14 @@
 #include <iostream>
 
+#include "Mint.h"
+
 int main(int argc, char **argv) {
-    if(argc < 2)
+    if(argc > 2)
         std::cerr << "Usage: " << argv[0] << " <file>" << std::endl;
     else if(argc == 2)
-        // TODO: run file
+        Mint::run_file(argv[1]);
     else
-        // TOOD: run prompt
+        Mint::run_prompt();
 
     return 0;
 }

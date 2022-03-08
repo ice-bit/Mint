@@ -5,8 +5,10 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <memory>
 
 #include "Mint.h"
+#include "Lexer.h"
 
 // Default error state
 bool Mint::had_error = false;
@@ -22,8 +24,11 @@ void Mint::run_file(const std::string &filepath) {
 }
 
 void Mint::run(std::string source) {
-    // TODO: scanner, parser, etc.
-    (void)source;
+    std::shared_ptr<Lexer> lexer(new Lexer(std::move(source)));
+    std::vector<Token> tokens = lexer->scan_tokens();
+
+    for(const auto& token: tokens)
+        std::cout << token.to_string() << std::endl;
 }
 
 void Mint::run_prompt() {
