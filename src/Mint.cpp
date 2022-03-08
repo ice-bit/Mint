@@ -9,6 +9,7 @@
 
 #include "Mint.h"
 #include "Lexer.h"
+#include "Parser.h"
 
 // Default error state
 bool Mint::had_error = false;
@@ -24,11 +25,15 @@ void Mint::run_file(const std::string &filepath) {
 }
 
 void Mint::run(std::string source) {
-    std::shared_ptr<Lexer> lexer(new Lexer(std::move(source)));
-    std::vector<Token> tokens = lexer->scan_tokens();
+    auto lexer(new Lexer(std::move(source)));
+    auto tokens = lexer->scan_tokens();
+    Parser parser{tokens};
+    auto expr = parser.parse();
 
-    for(const auto& token: tokens)
-        std::cout << token.to_string() << std::endl;
+    if(had_error) return;
+
+//    for(const auto& token: tokens)
+//        std::cout << token.to_string() << std::endl;
 }
 
 void Mint::run_prompt() {
@@ -46,7 +51,14 @@ void Mint::error(unsigned int line, const std::string &msg) {
     report(line, "", msg);
 }
 
-void Mint::report(unsigned int line, const std::string &pos, const std::string &reason) {
+void Mint::report(unsigned int line, const std::string &pos, const std::string_view reason) {
     std::cerr << "[Line " << line << "] Error " << pos << ": " << reason << std::endl;
     had_error = true;
+}
+
+void Mint::error(const Token& token, const std::string_view msg) {
+    if(token.type == token_type::MINT_EOF)
+        report(token.line, " at end", msg);
+    else
+        report(token.line, " at '" + token.lexeme + "'", msg);
 }
