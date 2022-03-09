@@ -3,7 +3,6 @@
 //
 
 #include <iostream>
-#include <utility>
 #include "Interpreter.h"
 #include "RuntimeError.h"
 #include "Mint.h"

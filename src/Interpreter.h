@@ -8,7 +8,7 @@
 
 #include "Expr.h"
 
-class Interpreter : public Visitor {
+class Interpreter : public ExprVisitor {
 public:
     void interpret(const std::shared_ptr<Expr>& expr);
     std::any visit_binary_expr(std::shared_ptr<Binary> expr) override;
