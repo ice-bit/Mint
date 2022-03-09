@@ -10,9 +10,11 @@
 #include "Mint.h"
 #include "Lexer.h"
 #include "Parser.h"
+#include "Interpreter.h"
 
 // Default error state
 bool Mint::had_error = false;
+bool Mint::had_runtime_error = false;
 
 void Mint::run_file(const std::string &filepath) {
     std::fstream source_file(filepath, std::ios::in | std::ios::binary);
@@ -28,12 +30,12 @@ void Mint::run(std::string source) {
     auto lexer(new Lexer(std::move(source)));
     auto tokens = lexer->scan_tokens();
     Parser parser{tokens};
+    Interpreter interpreter;
     auto expr = parser.parse();
 
     if(had_error) return;
 
-//    for(const auto& token: tokens)
-//        std::cout << token.to_string() << std::endl;
+    interpreter.interpret(expr);
 }
 
 void Mint::run_prompt() {
@@ -61,4 +63,9 @@ void Mint::error(const Token& token, const std::string_view msg) {
         report(token.line, " at end", msg);
     else
         report(token.line, " at '" + token.lexeme + "'", msg);
+}
+
+void Mint::runtime_error(const RuntimeError &err) {
+    std::cerr << "[Line " << err.token.line << "] " << err.what() << std::endl;
+    had_runtime_error = true;
 }

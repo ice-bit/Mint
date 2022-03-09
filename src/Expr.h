@@ -16,10 +16,10 @@ struct Unary;
 
 class Visitor {
 public:
-    [[nodiscard]] virtual std::any visit_binary_expr(std::shared_ptr<Binary> expr) const = 0;
-    [[nodiscard]] virtual std::any visit_grouping_expr(std::shared_ptr<Grouping> expr) const = 0;
-    [[nodiscard]] virtual std::any visit_literal_expr(std::shared_ptr<Literal> expr) const = 0;
-    [[nodiscard]] virtual std::any visit_unary_expr(std::shared_ptr<Unary> expr) const = 0;
+    [[nodiscard]] virtual std::any visit_binary_expr(std::shared_ptr<Binary> expr) = 0;
+    [[nodiscard]] virtual std::any visit_grouping_expr(std::shared_ptr<Grouping> expr) = 0;
+    [[nodiscard]] virtual std::any visit_literal_expr(std::shared_ptr<Literal> expr) = 0;
+    [[nodiscard]] virtual std::any visit_unary_expr(std::shared_ptr<Unary> expr) = 0;
     virtual ~Visitor() = default;
 };
 
