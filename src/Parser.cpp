@@ -105,7 +105,7 @@ bool Parser::match(T... type) {
     return false;
 }
 
-Token Parser::consume(token_type type, const std::string_view msg) {
+Token Parser::consume(token_type type, const std::string& msg) {
     if(check(type)) return advance();
 
     throw error(peek(), msg);
@@ -135,7 +135,7 @@ Token Parser::previous() {
     return tokens.at(current - 1);
 }
 
-Parser::ParseError Parser::error(const Token& token, std::string_view msg) {
+Parser::ParseError Parser::error(const Token& token, const std::string& msg) {
     Mint::error(token, msg);
 }
 

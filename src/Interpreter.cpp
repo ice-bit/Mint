@@ -7,13 +7,16 @@
 #include "RuntimeError.h"
 #include "Mint.h"
 
-void Interpreter::interpret(const std::shared_ptr<Expr>& expr) {
+void Interpreter::interpret(const std::vector<std::shared_ptr<Stmt>>& statements) {
     try {
-        std::any value = evaluate(expr);
-        std::cout << stringify(value) << std::endl;
+        for(const auto &statement : statements) execute(statement);
     } catch(const RuntimeError& err) {
         Mint::runtime_error(err);
     }
+}
+
+void Interpreter::execute(const std::shared_ptr<Stmt>& stmt) {
+    stmt->accept(*this);
 }
 
 std::any Interpreter::evaluate(const std::shared_ptr<Expr>& expr) {
@@ -60,7 +63,6 @@ std::any Interpreter::visit_binary_expr(std::shared_ptr<Binary> expr)  {
     return {};
 }
 
-
 std::any Interpreter::visit_grouping_expr(std::shared_ptr<Grouping> expr) {
     return evaluate(expr->expr);
 }
@@ -80,6 +82,10 @@ std::any Interpreter::visit_unary_expr(std::shared_ptr<Unary> expr) {
     }
 
     return {};
+}
+
+std::any Interpreter::visit_variable_expr(std::shared_ptr<Variable> expr) {
+    return environment->get(expr->name);
 }
 
 void Interpreter::check_number_operand(const Token &op, const std::any &operand) {

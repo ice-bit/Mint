@@ -53,12 +53,12 @@ void Mint::error(unsigned int line, const std::string &msg) {
     report(line, "", msg);
 }
 
-void Mint::report(unsigned int line, const std::string &pos, const std::string_view reason) {
+void Mint::report(unsigned int line, const std::string &pos, const std::string& reason) {
     std::cerr << "[Line " << line << "] Error " << pos << ": " << reason << std::endl;
     had_error = true;
 }
 
-void Mint::error(const Token& token, const std::string_view msg) {
+void Mint::error(const Token& token, const std::string& msg) {
     if(token.type == token_type::MINT_EOF)
         report(token.line, " at end", msg);
     else

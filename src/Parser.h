@@ -27,7 +27,7 @@ private:
     std::shared_ptr<Expr> factor();
     std::shared_ptr<Expr> unary();
     std::shared_ptr<Expr> primary();
-    Token consume(token_type type, std::string_view msg);
+    Token consume(token_type type, const std::string& msg);
     Token advance();
     Token peek();
     Token previous();
@@ -35,7 +35,7 @@ private:
     bool match(T... type);
     bool is_at_end();
     bool check(token_type type);
-    static ParseError error(const Token& token, std::string_view msg);
+    static ParseError error(const Token& token, const std::string& msg);
     void synchronize();
 
     const std::vector<Token>& tokens;
