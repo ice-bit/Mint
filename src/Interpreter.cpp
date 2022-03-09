@@ -6,6 +6,7 @@
 #include "Interpreter.h"
 #include "RuntimeError.h"
 #include "Mint.h"
+#include "Environment.h"
 
 void Interpreter::interpret(const std::vector<std::shared_ptr<Stmt>>& statements) {
     try {
@@ -13,6 +14,22 @@ void Interpreter::interpret(const std::vector<std::shared_ptr<Stmt>>& statements
     } catch(const RuntimeError& err) {
         Mint::runtime_error(err);
     }
+}
+
+void Interpreter::execute_block(const std::vector<std::shared_ptr<Stmt>>& statements,
+                                std::shared_ptr<Environment> environment) {
+    std::shared_ptr<Environment> previous = this->environment;
+    try {
+        this->environment = environment;
+
+        for(const auto& statement : statements)
+            execute(statement);
+    } catch(...) {
+        this->environment = previous;
+        throw;
+    }
+
+    this->environment = previous;
 }
 
 void Interpreter::execute(const std::shared_ptr<Stmt>& stmt) {
@@ -86,6 +103,42 @@ std::any Interpreter::visit_unary_expr(std::shared_ptr<Unary> expr) {
 
 std::any Interpreter::visit_variable_expr(std::shared_ptr<Variable> expr) {
     return environment->get(expr->name);
+}
+
+std::any Interpreter::visit_assign_expr(std::shared_ptr<Assign> expr) {
+    std::any value = evaluate(expr->value);
+    environment->assign(expr->name, value);
+
+    return value;
+}
+
+std::any Interpreter::visit_block_stmt(std::shared_ptr<Block> stmt) {
+    execute_block(stmt->statements, std::make_shared<Environment>(environment));
+
+    return {};
+}
+
+std::any Interpreter::visit_expression_stmt(std::shared_ptr<Expression> stmt) {
+    evaluate(stmt->expression);
+
+    return {};
+}
+
+std::any Interpreter::visit_print_stmt(std::shared_ptr<Print> stmt) {
+    std::any value = evaluate(stmt->expression);
+    std::cout << stringify(value) << std::endl;
+
+    return {};
+}
+
+std::any Interpreter::visit_var_stmt(std::shared_ptr<Var> stmt) {
+    std::any value = nullptr;
+    if(stmt->initializer != nullptr)
+        value = evaluate(stmt->initializer);
+
+    environment->define(stmt->name.lexeme, std::move(value));
+
+    return {};
 }
 
 void Interpreter::check_number_operand(const Token &op, const std::any &operand) {
