@@ -30,12 +30,12 @@ void Mint::run(std::string source) {
     auto lexer(new Lexer(std::move(source)));
     auto tokens = lexer->scan_tokens();
     Parser parser{tokens};
-    Interpreter interpreter;
-    auto expr = parser.parse();
+    Interpreter interpreter{};
+    std::vector<std::shared_ptr<Stmt>> statements = parser.parse();
 
     if(had_error) return;
 
-    interpreter.interpret(expr);
+    interpreter.interpret(statements);
 }
 
 void Mint::run_prompt() {

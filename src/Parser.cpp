@@ -5,17 +5,89 @@
 #include <cassert>
 #include "Parser.h"
 #include "Mint.h"
+#include "Token.h"
 
-std::shared_ptr<Expr> Parser::parse() {
+std::vector<std::shared_ptr<Stmt>> Parser::parse() {
+    std::vector<std::shared_ptr<Stmt>> statements;
+
+    while(!is_at_end())
+        statements.push_back(declaration());
+}
+
+std::shared_ptr<Expr> Parser::expression() {
+    return assignment();
+}
+
+std::shared_ptr<Stmt> Parser::declaration() {
     try {
-        return expression();
+        if(match(token_type::LET)) return var_declaration();
+
+        return statement();
     } catch(const ParseError& err) {
+        synchronize();
         return nullptr;
     }
 }
 
-std::shared_ptr<Expr> Parser::expression() {
-    return equality();
+std::shared_ptr<Stmt> Parser::statement() {
+    if(match(token_type::PRINT)) return print_statement();
+    if(match(token_type::LEFT_BRACE)) return std::make_shared<Block>(block());
+
+    return expr_statement();
+}
+
+std::shared_ptr<Stmt> Parser::print_statement() {
+    auto value = expression();
+    consume(token_type::SEMICOLON, "Expect ';' after value.");
+
+    return std::make_shared<Print>(value);
+}
+
+std::shared_ptr<Stmt> Parser::var_declaration() {
+    Token name = consume(token_type::IDENTIFIER, "Expect variable name.");
+    std::shared_ptr<Expr> initializer = nullptr;
+
+    if(match(token_type::EQUAL)) initializer = expression();
+
+    consume(token_type::SEMICOLON, "Expect ';' after variable declaration.");
+
+    return std::make_shared<Var>(std::move(name), initializer);
+}
+
+std::shared_ptr<Stmt> Parser::expr_statement() {
+    auto expr = expression();
+    consume(token_type::SEMICOLON, "Expect ';' after expression.");
+
+    return std::make_shared<Expression>(expr);
+}
+
+std::vector<std::shared_ptr<Stmt>> Parser::block() {
+    std::vector<std::shared_ptr<Stmt>> statements;
+
+    while(!check(token_type::RIGHT_BRACE) && !is_at_end())
+        statements.push_back(declaration());
+
+    consume(token_type::RIGHT_BRACE, "Expect '}' after block.");
+
+    return statements;
+}
+
+std::shared_ptr<Expr> Parser::assignment() {
+    auto expr = equality();
+
+    if(match(token_type::EQUAL)) {
+        Token equals = previous();
+        auto value = assignment();
+
+        if(auto * e = dynamic_cast<Variable*>(expr.get())) {
+            Token name = e->name;
+            return std::make_shared<Assign>(std::move(name), value);
+        }
+
+        Mint::error(equals, "Invalid assignment target.");
+    }
+
+    return expr;
 }
 
 std::shared_ptr<Expr> Parser::equality() {
@@ -34,7 +106,7 @@ std::shared_ptr<Expr> Parser::comparison() {
     auto expr = term();
 
     while(match(token_type::GREATER, token_type::GREATER_EQUAL, token_type::LESS, token_type::LESS_EQUAL)) {
-        Token op = previous();
+        auto op = previous();
         auto right = term();
         expr = std::make_shared<Binary>(expr, std::move(op), right);
     }
@@ -46,7 +118,7 @@ std::shared_ptr<Expr> Parser::term() {
     auto expr = factor();
 
     while(match(token_type::MINUS, token_type::PLUS)) {
-        Token op = previous();
+        auto op = previous();
         auto right = factor();
         expr = std::make_shared<Binary>(expr, std::move(op), right);
     }
@@ -58,7 +130,7 @@ std::shared_ptr<Expr> Parser::factor() {
     auto expr = unary();
 
     while(match(token_type::SLASH, token_type::STAR)) {
-        Token op = previous();
+        auto op = previous();
         auto right = unary();
         expr = std::make_shared<Binary>(expr, std::move(op), right);
     }
@@ -68,7 +140,7 @@ std::shared_ptr<Expr> Parser::factor() {
 
 std::shared_ptr<Expr> Parser::unary() {
     if(match(token_type::BANG, token_type::MINUS)) {
-        Token op = previous();
+        auto op = previous();
         auto right = unary();
         return std::make_shared<Unary>(std::move(op), right);
     }

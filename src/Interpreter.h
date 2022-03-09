@@ -28,12 +28,14 @@ public:
 private:
     std::any evaluate(const std::shared_ptr<Expr>& expr);
     void execute(const std::shared_ptr<Stmt>& stmt);
-    void execute_block(const std::vector<std::shared_ptr<Stmt>>& statements, std::shared_ptr<Environment> environment);
+    void execute_block(const std::vector<std::shared_ptr<Stmt>>& statements, std::shared_ptr<Environment> env);
     static void check_number_operand(const Token& op, const std::any& operand);
     static void check_number_operands(const Token& op, const std::any& left, const std::any& right);
     static bool is_truthy(const std::any& object);
     static bool is_equal(const std::any& a, const std::any& b);
     static std::string stringify(const std::any& object);
+
+    std::shared_ptr<Environment> environment{new Environment};
 };
 
 

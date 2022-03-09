@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <utility>
 #include "Interpreter.h"
 #include "RuntimeError.h"
 #include "Mint.h"
@@ -10,17 +11,18 @@
 
 void Interpreter::interpret(const std::vector<std::shared_ptr<Stmt>>& statements) {
     try {
-        for(const auto &statement : statements) execute(statement);
+        for(const auto &statement : statements)
+            execute(statement);
     } catch(const RuntimeError& err) {
         Mint::runtime_error(err);
     }
 }
 
 void Interpreter::execute_block(const std::vector<std::shared_ptr<Stmt>>& statements,
-                                std::shared_ptr<Environment> environment) {
+                                std::shared_ptr<Environment> env) {
     std::shared_ptr<Environment> previous = this->environment;
     try {
-        this->environment = environment;
+        this->environment = std::move(env);
 
         for(const auto& statement : statements)
             execute(statement);
