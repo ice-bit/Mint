@@ -4,10 +4,18 @@
 
 #include <iostream>
 #include <utility>
+#include <chrono>
 #include "Interpreter.h"
 #include "RuntimeError.h"
 #include "Mint.h"
 #include "Environment.h"
+#include "MintFunction.h"
+
+#define UNUSED(x) (void)(x)
+
+Interpreter::Interpreter() {
+    globals->define("clock", std::shared_ptr<NativeClock>{});
+}
 
 void Interpreter::interpret(const std::vector<std::shared_ptr<Stmt>>& statements) {
     try {
@@ -123,10 +131,33 @@ std::any Interpreter::visit_variable_expr(std::shared_ptr<Variable> expr) {
 }
 
 std::any Interpreter::visit_assign_expr(std::shared_ptr<Assign> expr) {
-    std::any value = evaluate(expr->value);
+    auto value = evaluate(expr->value);
     environment->assign(expr->name, value);
 
     return value;
+}
+
+std::any Interpreter::visit_call_expr(std::shared_ptr<Call> expr) {
+    auto callee = evaluate(expr->callee);
+
+    std::vector<std::any> arguments;
+    for(auto &argument : expr->arguments)
+        arguments.push_back(evaluate(argument));
+
+    std::shared_ptr<MintCallable> function;
+
+    if(callee.type() == typeid(std::shared_ptr<MintFunction>))
+        function = std::any_cast<std::shared_ptr<MintFunction>>(callee);
+    else
+        throw RuntimeError(expr->paren, "Can only call functions and classes.");
+
+    if(arguments.size() != function->arity()) {
+        throw RuntimeError(expr->paren, "Expected " +
+            std::to_string(function->arity()) + " arguments but got " +
+            std::to_string(arguments.size()) + ".");
+    }
+
+    return function->call(*this, std::move(arguments));
 }
 
 std::any Interpreter::visit_block_stmt(std::shared_ptr<Block> stmt) {
@@ -220,6 +251,40 @@ std::string Interpreter::stringify(const std::any &object) {
         return std::any_cast<std::string>(object);
     if(object.type() == typeid(bool))
         return std::any_cast<bool>(object) ? "true" : "false";
+    if(object.type() == typeid(std::shared_ptr<MintFunction>))
+        return std::any_cast<std::shared_ptr<MintFunction>>(object)->to_string();
 
     return "Error in 'stringify': object type not supported.";
+}
+
+std::any Interpreter::visit_function_stmt(std::shared_ptr<Function> stmt) {
+    auto function = std::make_shared<MintFunction>(stmt, environment);
+    environment->define(stmt->name.lexeme, function);
+
+    return {};
+}
+
+std::any Interpreter::visit_return_stmt(std::shared_ptr<Return> stmt) {
+    std::any value = nullptr;
+
+    if(stmt->value != nullptr) value = evaluate(stmt->value);
+
+    throw MintReturn{value};
+}
+
+unsigned short NativeClock::arity() {
+    return 0;
+}
+
+std::any NativeClock::call(Interpreter &interpreter, std::vector<std::any> arguments) {
+    auto ticks = std::chrono::system_clock::now().time_since_epoch();
+
+    UNUSED(interpreter);
+    UNUSED(arguments);
+
+    return std::chrono::duration<double>(ticks).count() / 1000.0;
+}
+
+std::string NativeClock::to_string() {
+    return "<native fn>";
 }

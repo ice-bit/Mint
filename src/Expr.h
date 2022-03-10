@@ -8,9 +8,11 @@
 #include <any>
 #include <memory>
 #include <utility>
+#include <vector>
 #include "Token.h"
 
 struct Binary;
+struct Call;
 struct Grouping;
 struct Literal;
 struct Logical;
@@ -21,6 +23,7 @@ struct Assign;
 class ExprVisitor {
 public:
     [[nodiscard]] virtual std::any visit_binary_expr(std::shared_ptr<Binary> expr) = 0;
+    [[nodiscard]] virtual std::any visit_call_expr(std::shared_ptr<Call> expr) = 0;
     [[nodiscard]] virtual std::any visit_grouping_expr(std::shared_ptr<Grouping> expr) = 0;
     [[nodiscard]] virtual std::any visit_literal_expr(std::shared_ptr<Literal> expr) = 0;
     [[nodiscard]] virtual std::any visit_logical_expr(std::shared_ptr<Logical> expr) = 0;
@@ -112,6 +115,19 @@ struct Assign : Expr, public std::enable_shared_from_this<Assign> {
 
     const Token name;
     const std::shared_ptr<Expr> value;
+};
+
+struct Call : Expr, public std::enable_shared_from_this<Call> {
+    Call(std::shared_ptr<Expr>  callee, Token  paren, std::vector<std::shared_ptr<Expr>>  arguments)
+        : callee(std::move(callee)), paren(std::move(paren)), arguments(std::move(arguments)) {};
+
+    std::any accept(ExprVisitor& visitor) override {
+        return visitor.visit_call_expr(shared_from_this());
+    }
+
+    const std::shared_ptr<Expr> callee;
+    const Token paren;
+    const std::vector<std::shared_ptr<Expr>> arguments;
 };
 
 #endif //MINT_EXPR_H

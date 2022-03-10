@@ -11,6 +11,7 @@
 #include "Lexer.h"
 #include "Parser.h"
 #include "Interpreter.h"
+#include "MintFunction.h"
 
 // Default error state
 bool Mint::had_error = false;
