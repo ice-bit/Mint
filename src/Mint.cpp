@@ -15,6 +15,7 @@
 // Default error state
 bool Mint::had_error = false;
 bool Mint::had_runtime_error = false;
+Interpreter interpreter{};
 
 void Mint::run_file(const std::string &filepath) {
     std::fstream source_file(filepath, std::ios::in | std::ios::binary);
@@ -26,14 +27,15 @@ void Mint::run_file(const std::string &filepath) {
     if(had_error) exit(65);
 }
 
+
 void Mint::run(std::string source) {
     auto lexer(new Lexer(std::move(source)));
     auto tokens = lexer->scan_tokens();
     Parser parser{tokens};
-    Interpreter interpreter{};
     std::vector<std::shared_ptr<Stmt>> statements = parser.parse();
 
     if(had_error) return;
+    if(had_runtime_error) return;
 
     interpreter.interpret(statements);
 }

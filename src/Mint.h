@@ -8,6 +8,7 @@
 #include <string>
 #include "Token.h"
 #include "RuntimeError.h"
+#include "Interpreter.h"
 
 class Mint {
 public:

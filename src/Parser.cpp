@@ -1,17 +1,19 @@
 //
-// Created by marco on 3/8/22.
+// Created by marco on 3/9/22.
 //
 
-#include <cassert>
 #include "Parser.h"
 #include "Mint.h"
-#include "Token.h"
+
+#include <cassert>
 
 std::vector<std::shared_ptr<Stmt>> Parser::parse() {
     std::vector<std::shared_ptr<Stmt>> statements;
 
     while(!is_at_end())
         statements.push_back(declaration());
+
+    return statements;
 }
 
 std::shared_ptr<Expr> Parser::expression() {
@@ -21,9 +23,8 @@ std::shared_ptr<Expr> Parser::expression() {
 std::shared_ptr<Stmt> Parser::declaration() {
     try {
         if(match(token_type::LET)) return var_declaration();
-
         return statement();
-    } catch(const ParseError& err) {
+    } catch(ParseError& err) {
         synchronize();
         return nullptr;
     }
@@ -44,13 +45,13 @@ std::shared_ptr<Stmt> Parser::print_statement() {
 }
 
 std::shared_ptr<Stmt> Parser::var_declaration() {
-    Token name = consume(token_type::IDENTIFIER, "Expect variable name.");
-    std::shared_ptr<Expr> initializer = nullptr;
+    auto name = consume(token_type::IDENTIFIER, "Expect variable name.");
 
-    if(match(token_type::EQUAL)) initializer = expression();
+    std::shared_ptr<Expr> initializer = nullptr;
+    if(match(token_type::EQUAL))
+        initializer = expression();
 
     consume(token_type::SEMICOLON, "Expect ';' after variable declaration.");
-
     return std::make_shared<Var>(std::move(name), initializer);
 }
 
@@ -72,19 +73,20 @@ std::vector<std::shared_ptr<Stmt>> Parser::block() {
     return statements;
 }
 
+
 std::shared_ptr<Expr> Parser::assignment() {
     auto expr = equality();
 
     if(match(token_type::EQUAL)) {
-        Token equals = previous();
+        auto equals = previous();
         auto value = assignment();
 
-        if(auto * e = dynamic_cast<Variable*>(expr.get())) {
-            Token name = e->name;
+        if(auto* e = dynamic_cast<Variable*>(expr.get())) {
+            auto name = e->name;
             return std::make_shared<Assign>(std::move(name), value);
         }
 
-        Mint::error(equals, "Invalid assignment target.");
+        error(equals, "Invalid assignment target.");
     }
 
     return expr;
@@ -94,7 +96,7 @@ std::shared_ptr<Expr> Parser::equality() {
     auto expr = comparison();
 
     while(match(token_type::BANG_EQUAL, token_type::EQUAL_EQUAL)) {
-        Token op = previous();
+        auto op = previous();
         auto right = comparison();
         expr = std::make_shared<Binary>(expr, std::move(op), right);
     }
@@ -130,7 +132,7 @@ std::shared_ptr<Expr> Parser::factor() {
     auto expr = unary();
 
     while(match(token_type::SLASH, token_type::STAR)) {
-        auto op = previous();
+        Token op = previous();
         auto right = unary();
         expr = std::make_shared<Binary>(expr, std::move(op), right);
     }
@@ -156,6 +158,9 @@ std::shared_ptr<Expr> Parser::primary() {
     if(match(token_type::NUMBER, token_type::STRING))
         return std::make_shared<Literal>(previous().literal);
 
+    if(match(token_type::IDENTIFIER))
+        return std::make_shared<Variable>(previous());
+
     if(match(token_type::LEFT_PAREN)) {
         std::shared_ptr<Expr> expr = expression();
         consume(token_type::RIGHT_PAREN, "Expect ')' after expression.");
@@ -177,7 +182,7 @@ bool Parser::match(T... type) {
     return false;
 }
 
-Token Parser::consume(token_type type, const std::string& msg) {
+Token Parser::consume(token_type type, std::string msg) {
     if(check(type)) return advance();
 
     throw error(peek(), msg);
@@ -188,6 +193,7 @@ bool Parser::check(token_type type) {
 
     return peek().type == type;
 }
+
 
 Token Parser::advance() {
     if(!is_at_end()) ++current;
@@ -207,8 +213,10 @@ Token Parser::previous() {
     return tokens.at(current - 1);
 }
 
-Parser::ParseError Parser::error(const Token& token, const std::string& msg) {
-    Mint::error(token, msg);
+Parser::ParseError Parser::error(const Token &token, const std::string& msg) {
+   Mint::error(token, msg);
+
+   return ParseError{""};
 }
 
 void Parser::synchronize() {
@@ -225,7 +233,7 @@ void Parser::synchronize() {
             case token_type::IF:
             case token_type::WHILE:
             case token_type::PRINT:
-            case token_type::RETURN: break;
+            case token_type::RETURN: return;
         }
         advance();
     }
