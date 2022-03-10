@@ -7,11 +7,13 @@
 
 #include <any>
 #include <memory>
+#include <utility>
 #include "Token.h"
 
 struct Binary;
 struct Grouping;
 struct Literal;
+struct Logical;
 struct Unary;
 struct Variable;
 struct Assign;
@@ -21,6 +23,7 @@ public:
     [[nodiscard]] virtual std::any visit_binary_expr(std::shared_ptr<Binary> expr) = 0;
     [[nodiscard]] virtual std::any visit_grouping_expr(std::shared_ptr<Grouping> expr) = 0;
     [[nodiscard]] virtual std::any visit_literal_expr(std::shared_ptr<Literal> expr) = 0;
+    [[nodiscard]] virtual std::any visit_logical_expr(std::shared_ptr<Logical> expr) = 0;
     [[nodiscard]] virtual std::any visit_unary_expr(std::shared_ptr<Unary> expr) = 0;
     [[nodiscard]] virtual std::any visit_variable_expr(std::shared_ptr<Variable> expr) = 0;
     [[nodiscard]] virtual std::any visit_assign_expr(std::shared_ptr<Assign> expr) = 0;
@@ -64,6 +67,19 @@ struct Literal : Expr, public std::enable_shared_from_this<Literal> {
     }
 
     const std::any value;
+};
+
+struct Logical : Expr, public std::enable_shared_from_this<Logical> {
+    Logical(std::shared_ptr<Expr> left, Token op, std::shared_ptr<Expr> right)
+        : left(std::move(left)), op(std::move(op)), right(std::move(right)) {};
+
+    std::any accept(ExprVisitor& visitor) override {
+        return visitor.visit_logical_expr(shared_from_this());
+    }
+
+    const std::shared_ptr<Expr> left;
+    const Token op;
+    const std::shared_ptr<Expr> right;
 };
 
 struct Unary : Expr, public std::enable_shared_from_this<Unary> {

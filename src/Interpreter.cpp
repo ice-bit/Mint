@@ -90,6 +90,19 @@ std::any Interpreter::visit_literal_expr(std::shared_ptr<Literal> expr) {
     return expr->value;
 }
 
+std::any Interpreter::visit_logical_expr(std::shared_ptr<Logical> expr) {
+    auto left = evaluate(expr->left);
+
+    if(expr->op.type == token_type::OR) {
+        if (is_truthy(left)) return left;
+    }
+    else {
+        if (!is_truthy(left)) return left;
+    }
+
+    return evaluate(expr->right);
+}
+
 std::any Interpreter::visit_unary_expr(std::shared_ptr<Unary> expr) {
     std::any right = evaluate(expr->right);
 
@@ -139,6 +152,22 @@ std::any Interpreter::visit_var_stmt(std::shared_ptr<Var> stmt) {
         value = evaluate(stmt->initializer);
 
     environment->define(stmt->name.lexeme, std::move(value));
+
+    return {};
+}
+
+std::any Interpreter::visit_if_stmt(std::shared_ptr<If> stmt) {
+    if(is_truthy(evaluate(stmt->condition)))
+        execute(stmt->then_branch);
+    else if(stmt->else_branch != nullptr)
+        execute(stmt->else_branch);
+
+    return {};
+}
+
+std::any Interpreter::visit_while_stmt(std::shared_ptr<While> stmt) {
+    while(is_truthy(evaluate(stmt->condition)))
+        execute(stmt->body);
 
     return {};
 }

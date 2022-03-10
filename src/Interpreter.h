@@ -17,6 +17,7 @@ public:
     std::any visit_binary_expr(std::shared_ptr<Binary> expr) override;
     std::any visit_grouping_expr(std::shared_ptr<Grouping> expr) override;
     std::any visit_literal_expr(std::shared_ptr<Literal> expr) override;
+    std::any visit_logical_expr(std::shared_ptr<Logical> expr) override;
     std::any visit_unary_expr(std::shared_ptr<Unary> expr) override;
     std::any visit_variable_expr(std::shared_ptr<Variable> expr) override;
     std::any visit_assign_expr(std::shared_ptr<Assign> expr) override;
@@ -25,6 +26,8 @@ public:
     std::any visit_expression_stmt(std::shared_ptr<Expression> stmt) override;
     std::any visit_print_stmt(std::shared_ptr<Print> stmt) override;
     std::any visit_var_stmt(std::shared_ptr<Var> stmt) override;
+    std::any visit_if_stmt(std::shared_ptr<If> stmt) override;
+    std::any visit_while_stmt(std::shared_ptr<While> stmt) override;
 private:
     std::any evaluate(const std::shared_ptr<Expr>& expr);
     void execute(const std::shared_ptr<Stmt>& stmt);
