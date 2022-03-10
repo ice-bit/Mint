@@ -77,6 +77,7 @@ std::any Interpreter::visit_binary_expr(std::shared_ptr<Binary> expr)  {
         case token_type::STAR:
             check_number_operands(expr->op, left, right);
             return std::any_cast<double>(left) * std::any_cast<double>(right);
+        default: break;
     }
 
     return {};
@@ -111,6 +112,7 @@ std::any Interpreter::visit_unary_expr(std::shared_ptr<Unary> expr) {
         case token_type::MINUS:
             check_number_operand(expr->op, right);
             return -std::any_cast<double>(right);
+        default: break;
     }
 
     return {};

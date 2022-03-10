@@ -29,7 +29,7 @@ enum class token_type {
 class Token {
 public:
     Token(token_type type, std::string lexeme, std::any literal, unsigned int line)
-        : type(type), lexeme(std::move(lexeme)), literal(std::move(literal)), line(line) {};
+        : type(type), literal(std::move(literal)), lexeme(std::move(lexeme)), line(line) {};
     [[nodiscard]] std::string to_string() const;
 
     const token_type type;

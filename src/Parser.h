@@ -40,7 +40,7 @@ private:
     std::shared_ptr<Expr> unary();
     std::shared_ptr<Expr> primary();
     template <class... T>
-    bool match(T... type);;
+    bool match(T... type);
     bool check(token_type type);
     bool is_at_end();
     Token peek();

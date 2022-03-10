@@ -293,6 +293,7 @@ void Parser::synchronize() {
             case token_type::WHILE:
             case token_type::PRINT:
             case token_type::RETURN: return;
+            default: break;
         }
         advance();
     }
