@@ -22,12 +22,16 @@ Interpreter interpreter;
 void Mint::run_file(const std::string &filepath) {
     std::fstream source_file(filepath, std::ios::in | std::ios::binary);
     std::stringstream buf;
+    uint8_t exit_code = 0;
 
     buf << source_file.rdbuf();
     run(buf.str());
 
-    if(had_error) std::exit(65);
-    if(had_runtime_error) std::exit(70);
+    if(had_error) exit_code = 65;
+    if(had_runtime_error) exit_code = 70;
+
+    source_file.close();
+    std::exit(exit_code);
 }
 
 
