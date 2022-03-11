@@ -23,6 +23,7 @@ friend class MintFunction;
 public:
     Interpreter();
     void interpret(const std::vector<std::shared_ptr<Stmt>>& statements);
+    void resolve(const std::shared_ptr<Expr>& expr, int depth);
     // Expr abstract class
     std::any visit_binary_expr(std::shared_ptr<Binary> expr) override;
     std::any visit_grouping_expr(std::shared_ptr<Grouping> expr) override;
@@ -36,7 +37,7 @@ public:
     std::any visit_block_stmt(std::shared_ptr<Block> stmt) override;
     std::any visit_expression_stmt(std::shared_ptr<Expression> stmt) override;
     std::any visit_print_stmt(std::shared_ptr<Print> stmt) override;
-    std::any visit_var_stmt(std::shared_ptr<Var> stmt) override;
+    std::any visit_variable_stmt(std::shared_ptr<Var> stmt) override;
     std::any visit_if_stmt(std::shared_ptr<If> stmt) override;
     std::any visit_while_stmt(std::shared_ptr<While> stmt) override;
     std::any visit_function_stmt(std::shared_ptr<Function> stmt) override;
@@ -45,6 +46,7 @@ public:
     std::shared_ptr<Environment> globals{new Environment};
 private:
     std::any evaluate(const std::shared_ptr<Expr>& expr);
+    std::any lookup_variable(const Token& name, const std::shared_ptr<Expr>& expr);
     void execute(const std::shared_ptr<Stmt>& stmt);
     void execute_block(const std::vector<std::shared_ptr<Stmt>>& statements, std::shared_ptr<Environment> env);
     static void check_number_operand(const Token& op, const std::any& operand);
@@ -53,7 +55,8 @@ private:
     static bool is_equal(const std::any& a, const std::any& b);
     static std::string stringify(const std::any& object);
 
-    std::shared_ptr<Environment> environment{new Environment};
+    std::shared_ptr<Environment> environment = globals;
+    std::map<std::shared_ptr<Expr>, int> locals;
 };
 
 

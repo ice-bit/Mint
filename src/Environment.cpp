@@ -32,3 +32,20 @@ void Environment::assign(const Token &name, std::any value) {
 void Environment::define(const std::string &name, std::any value) {
     values[name] = std::move(value);
 }
+
+std::shared_ptr<Environment> Environment::ancestor(const unsigned int distance) {
+    std::shared_ptr<Environment> env = shared_from_this();
+
+    for(size_t i = 0; i < distance; i++)
+        env = env->enclosing;
+
+    return env;
+}
+
+std::any Environment::get_at(const unsigned int distance, const std::string& name) {
+    return ancestor(distance)->values[name];
+}
+
+void Environment::assign_at(unsigned int distance, const Token& name, std::any value) {
+    ancestor(distance)->values[name.lexeme] = std::move(value);
+}

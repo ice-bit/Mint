@@ -28,7 +28,7 @@ public:
     virtual std::any visit_if_stmt(std::shared_ptr<If> stmt) = 0;
     virtual std::any visit_print_stmt(std::shared_ptr<Print> stmt) = 0;
     virtual std::any visit_return_stmt(std::shared_ptr<Return> stmt) = 0;
-    virtual std::any visit_var_stmt(std::shared_ptr<Var> stmt) = 0;
+    virtual std::any visit_variable_stmt(std::shared_ptr<Var> stmt) = 0;
     virtual std::any visit_while_stmt(std::shared_ptr<While> stmt) = 0;
     virtual ~StmtVisitor() = default;
 };
@@ -111,7 +111,7 @@ struct Var : Stmt, public std::enable_shared_from_this<Var> {
         : name(std::move(name)), initializer(std::move(initializer)) {};
 
     std::any accept(StmtVisitor& visitor) override {
-        return visitor.visit_var_stmt(shared_from_this());
+        return visitor.visit_variable_stmt(shared_from_this());
     }
 
     const Token name;

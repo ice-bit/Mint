@@ -26,6 +26,10 @@ void Interpreter::interpret(const std::vector<std::shared_ptr<Stmt>>& statements
     }
 }
 
+void Interpreter::resolve(const std::shared_ptr<Expr>& expr, const int depth) {
+    locals[expr] = depth;
+}
+
 void Interpreter::execute_block(const std::vector<std::shared_ptr<Stmt>>& statements,
                                 std::shared_ptr<Environment> env) {
     std::shared_ptr<Environment> previous = this->environment;
@@ -48,6 +52,14 @@ void Interpreter::execute(const std::shared_ptr<Stmt>& stmt) {
 
 std::any Interpreter::evaluate(const std::shared_ptr<Expr>& expr) {
     return expr->accept(*this);
+}
+
+std::any Interpreter::lookup_variable(const Token& name, const std::shared_ptr<Expr>& expr) {
+    auto elem = locals.find(expr);
+    if(elem != locals.end()) {
+        auto distance = elem->second;
+        return environment->get_at(distance, name.lexeme);
+    } else return globals->get(name);
 }
 
 std::any Interpreter::visit_binary_expr(std::shared_ptr<Binary> expr)  {
@@ -127,12 +139,17 @@ std::any Interpreter::visit_unary_expr(std::shared_ptr<Unary> expr) {
 }
 
 std::any Interpreter::visit_variable_expr(std::shared_ptr<Variable> expr) {
-    return environment->get(expr->name);
+    return lookup_variable(expr->name, expr);
 }
 
 std::any Interpreter::visit_assign_expr(std::shared_ptr<Assign> expr) {
     auto value = evaluate(expr->value);
-    environment->assign(expr->name, value);
+    auto elem = locals.find(expr);
+
+    if(elem != locals.end()) {
+        auto distance = elem->second;
+        environment->assign_at(distance, expr->name, value);
+    } else globals->assign(expr->name, value);
 
     return value;
 }
@@ -179,7 +196,7 @@ std::any Interpreter::visit_print_stmt(std::shared_ptr<Print> stmt) {
     return {};
 }
 
-std::any Interpreter::visit_var_stmt(std::shared_ptr<Var> stmt) {
+std::any Interpreter::visit_variable_stmt(std::shared_ptr<Var> stmt) {
     std::any value = nullptr;
     if(stmt->initializer != nullptr)
         value = evaluate(stmt->initializer);
