@@ -45,7 +45,7 @@ void Resolver::end_scope() {
 void Resolver::declare(const Token &name) {
     if(scopes.empty()) return;
 
-    auto scope = scopes.back();
+    auto& scope = scopes.back();
     if(scope.find(name.lexeme) != scope.end())
         Mint::error(name, "Already a variable with this name in this scope.");
 
@@ -58,7 +58,7 @@ void Resolver::define(const Token &name) {
 }
 
 void Resolver::resolve_local(const std::shared_ptr<Expr>& expr, const Token &name) {
-    for(int i = (signed)scopes.size()-1; i >= 0; i--) {
+    for(auto i = (signed)scopes.size()-1; i >= 0; i--) {
         if(scopes[i].find(name.lexeme) != scopes[i].end()) {
             interpreter.resolve(expr, (signed)(scopes.size() - 1 - i));
             return;
