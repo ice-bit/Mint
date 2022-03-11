@@ -33,12 +33,21 @@ public:
     std::any visit_variable_expr(std::shared_ptr<Variable> expr) override;
 
 private:
-    Interpreter& interpreter;
-    std::vector<std::map<std::string, bool>> scopes;
     enum class function_type {
         NONE,
         FUNCTION
     };
+    void resolve(const std::shared_ptr<Stmt>& stmt);
+    void resolve(const std::shared_ptr<Expr>& expr);
+    void resolve_function(const std::shared_ptr<Function>& function, function_type type);
+    void begin_scope();
+    void end_scope();
+    void declare(const Token& name);
+    void define(const Token& name);
+    void resolve_local(const std::shared_ptr<Expr>& expr, const Token& name);
+
+    Interpreter& interpreter;
+    std::vector<std::map<std::string, bool>> scopes;
     function_type current_fun = function_type::NONE;
 };
 

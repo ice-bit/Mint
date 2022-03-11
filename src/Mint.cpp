@@ -12,11 +12,12 @@
 #include "Parser.h"
 #include "Interpreter.h"
 #include "MintFunction.h"
+#include "Resolver.h"
 
 // Default error state
 bool Mint::had_error = false;
 bool Mint::had_runtime_error = false;
-Interpreter interpreter{};
+Interpreter interpreter;
 
 void Mint::run_file(const std::string &filepath) {
     std::fstream source_file(filepath, std::ios::in | std::ios::binary);
@@ -36,6 +37,10 @@ void Mint::run(std::string source) {
     std::vector<std::shared_ptr<Stmt>> statements = parser.parse();
 
     if(had_error) return;
+
+    Resolver resolver(interpreter);
+    resolver.resolve(statements);
+
     if(had_runtime_error) return;
 
     interpreter.interpret(statements);
