@@ -11,6 +11,7 @@
 
 class Environment;
 class Function;
+class MintInstance;
 
 class MintReturn {
 public:

@@ -26,7 +26,8 @@ void Mint::run_file(const std::string &filepath) {
     buf << source_file.rdbuf();
     run(buf.str());
 
-    if(had_error) exit(65);
+    if(had_error) std::exit(65);
+    if(had_runtime_error) std::exit(70);
 }
 
 
@@ -35,13 +36,14 @@ void Mint::run(std::string source) {
     auto tokens = lexer->scan_tokens();
     Parser parser{tokens};
     std::vector<std::shared_ptr<Stmt>> statements = parser.parse();
-
+    // Catch syntax errors(managed by the parser)
     if(had_error) return;
 
     Resolver resolver(interpreter);
     resolver.resolve(statements);
 
-    if(had_runtime_error) return;
+    // Catch execution errors(managed by the resolver)
+    if(had_error) return;
 
     interpreter.interpret(statements);
 }
@@ -61,16 +63,16 @@ void Mint::error(unsigned int line, const std::string &msg) {
     report(line, "", msg);
 }
 
-void Mint::report(unsigned int line, const std::string &pos, const std::string& reason) {
-    std::cerr << "[Line " << line << "] Error" << pos << ": " << reason << std::endl;
-    had_error = true;
-}
-
 void Mint::error(const Token& token, const std::string& msg) {
     if(token.type == token_type::MINT_EOF)
         report(token.line, " at end", msg);
     else
         report(token.line, " at '" + token.lexeme + "'", msg);
+}
+
+void Mint::report(unsigned int line, const std::string &pos, const std::string& reason) {
+    std::cerr << "[Line " << line << "] Error" << pos << ": " << reason << std::endl;
+    had_error = true;
 }
 
 void Mint::runtime_error(const RuntimeError &err) {

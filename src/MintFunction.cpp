@@ -16,7 +16,7 @@ unsigned short MintFunction::arity() {
 
 std::any MintFunction::call(Interpreter &interpreter, std::vector<std::any> arguments) {
     auto env = std::make_shared<Environment>(closure);
-    for(size_t i = 0; i < declaration->params.size(); i++)
+    for(auto i = 0UL; i < declaration->params.size(); i++)
         env->define(declaration->params[i].lexeme, arguments[i]);
 
     try {
