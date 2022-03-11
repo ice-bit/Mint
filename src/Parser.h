@@ -27,7 +27,6 @@ private:
     std::shared_ptr<Stmt> statement();
     std::shared_ptr<Stmt> print_statement();
     std::shared_ptr<Stmt> var_declaration();
-    std::shared_ptr<Stmt> expr_statement();
     std::shared_ptr<Stmt> while_statement();
     std::shared_ptr<Stmt> for_statement();
     std::shared_ptr<Function> function(std::string kind);

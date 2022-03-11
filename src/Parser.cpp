@@ -39,7 +39,7 @@ std::shared_ptr<Stmt> Parser::statement() {
     if(match(token_type::WHILE)) return while_statement();
     if(match(token_type::LEFT_BRACE)) return std::make_shared<Block>(block());
 
-    return expr_statement();
+    return expression_statement();
 }
 
 std::shared_ptr<Stmt> Parser::for_statement() {
@@ -48,7 +48,7 @@ std::shared_ptr<Stmt> Parser::for_statement() {
     std::shared_ptr<Stmt> initializer;
     if(match(token_type::SEMICOLON)) initializer = nullptr;
     else if(match(token_type::LET)) initializer = var_declaration();
-    else initializer = expr_statement();
+    else initializer = expression_statement();
 
     std::shared_ptr<Expr> cond = nullptr;
     if(!check(token_type::SEMICOLON)) cond = expression();
@@ -201,13 +201,6 @@ std::shared_ptr<Stmt> Parser::var_declaration() {
     return std::make_shared<Var>(std::move(name), initializer);
 }
 
-std::shared_ptr<Stmt> Parser::expr_statement() {
-    auto expr = expression();
-    consume(token_type::SEMICOLON, "Expect ';' after expression.");
-
-    return std::make_shared<Expression>(expr);
-}
-
 std::vector<std::shared_ptr<Stmt>> Parser::block() {
     std::vector<std::shared_ptr<Stmt>> statements;
 
@@ -293,7 +286,7 @@ std::shared_ptr<Expr> Parser::unary() {
         return std::make_shared<Unary>(std::move(op), right);
     }
 
-    return primary();
+    return call();
 }
 
 std::shared_ptr<Expr> Parser::primary() {
