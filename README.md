@@ -8,7 +8,7 @@ Mint is an interpreted programming language written in modern C++(>=17). The Min
 
 The Mint interpreter is built following [Robert Nystrom's book: _"Crafting Interpreters"_](https://craftinginterpreters.com/), therefore the Mint programming language is heavily inspired to Lox.
 
-# Benchmarks
+## Benchmarks
 Mint is quite fast for a three-walking interpreter, below you can find a table with some benchmarks:
 TODO: add table
 
@@ -26,10 +26,5 @@ You can either use Mint by the interactive REPL or by providing a source file. D
 TODO:
 
 
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
+## Grammar
+TODO:
