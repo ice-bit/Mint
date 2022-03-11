@@ -221,7 +221,7 @@ std::vector<std::shared_ptr<Stmt>> Parser::block() {
 
 
 std::shared_ptr<Expr> Parser::assignment() {
-    auto expr = equality();
+    auto expr = or_expression();
 
     if(match(token_type::EQUAL)) {
         auto equals = previous();

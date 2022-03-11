@@ -57,7 +57,7 @@ void Mint::error(unsigned int line, const std::string &msg) {
 }
 
 void Mint::report(unsigned int line, const std::string &pos, const std::string& reason) {
-    std::cerr << "[Line " << line << "] Error " << pos << ": " << reason << std::endl;
+    std::cerr << "[Line " << line << "] Error" << pos << ": " << reason << std::endl;
     had_error = true;
 }
 
