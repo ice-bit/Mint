@@ -11,13 +11,6 @@
 #include "Environment.h"
 #include "MintCallable.h"
 
-class NativeClock : public MintCallable {
-public:
-    unsigned short arity() override;
-    std::any call(Interpreter& interpreter, std::vector<std::any> arguments) override;
-    std::string to_string() override;
-};
-
 class Interpreter : public ExprVisitor, public StmtVisitor {
 friend class MintFunction;
 public:

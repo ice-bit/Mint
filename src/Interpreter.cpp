@@ -13,9 +13,7 @@
 
 #define UNUSED(x) (void)(x)
 
-Interpreter::Interpreter() {
-    globals->define("clock", std::shared_ptr<NativeClock>{});
-}
+Interpreter::Interpreter() = default;
 
 void Interpreter::interpret(const std::vector<std::shared_ptr<Stmt>>& statements) {
     try {
@@ -287,21 +285,4 @@ std::any Interpreter::visit_return_stmt(std::shared_ptr<Return> stmt) {
     if(stmt->value != nullptr) value = evaluate(stmt->value);
 
     throw MintReturn{value};
-}
-
-unsigned short NativeClock::arity() {
-    return 0;
-}
-
-std::any NativeClock::call(Interpreter &interpreter, std::vector<std::any> arguments) {
-    auto ticks = std::chrono::system_clock::now().time_since_epoch();
-
-    UNUSED(interpreter);
-    UNUSED(arguments);
-
-    return std::chrono::duration<double>(ticks).count() / 1000.0;
-}
-
-std::string NativeClock::to_string() {
-    return "<native fn>";
 }

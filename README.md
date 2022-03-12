@@ -6,7 +6,7 @@ Mint is an interpreted programming language written in modern C++(>=17). The Min
 - Support for the Object Oriented paradigm(class/object and inheritance);  
 - Function closures.
 
-The Mint interpreter is built following [Robert Nystrom's book: _"Crafting Interpreters"_](https://craftinginterpreters.com/), therefore the Mint programming language is heavily inspired to Lox.
+The Mint interpreter is built following [Robert Nystrom's book: _"Crafting Interpreters"_](https://craftinginterpreters.com/), therefore the Mint programming language is heavily inspired by Lox.
 
 ## Benchmarks
 Mint is quite fast for a three-walking interpreter, below you can find a table with some benchmarks:
@@ -23,8 +23,4 @@ $> make
 ## Usage
 TODO: add cli helper
 You can either use Mint by the interactive REPL or by providing a source file. Do note that the REPL does not supports statements splitted into multiple lines. You can find a complete list of supported programs into the `examples/` directory. Here some of them:
-TODO:
-
-
-## Grammar
 TODO:
