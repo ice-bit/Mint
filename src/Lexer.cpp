@@ -35,6 +35,7 @@ void Lexer::scan_token() {
         case '+': add_token(token_type::PLUS); break;
         case ';': add_token(token_type::SEMICOLON); break;
         case '*': add_token(token_type::STAR); break;
+        case '%': add_token(token_type::MODULO); break;
         case '!': add_token(match('=') ? token_type::BANG_EQUAL : token_type::BANG); break;
         case '=': add_token(match('=') ? token_type::EQUAL_EQUAL : token_type::EQUAL); break;
         case '<': add_token(match('=') ? token_type::LESS_EQUAL : token_type::LESS); break;

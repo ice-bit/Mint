@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include <utility>
-#include <chrono>
+#include <cmath>
 #include "Interpreter.h"
 #include "RuntimeError.h"
 #include "Mint.h"
@@ -95,6 +95,12 @@ std::any Interpreter::visit_binary_expr(std::shared_ptr<Binary> expr)  {
         case token_type::STAR:
             check_number_operands(expr->op, left, right);
             return std::any_cast<double>(left) * std::any_cast<double>(right);
+        case token_type::MODULO: {
+            check_number_operands(expr->op, left, right);
+            auto left_exp = std::any_cast<double>(left);
+            auto right_expr = std::any_cast<double>(right);
+            return std::fmod(left_exp, right_expr);
+        }
         default: break;
     }
 

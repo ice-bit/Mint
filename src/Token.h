@@ -15,7 +15,7 @@ enum class token_type {
     COMMA, DOT, MINUS, PLUS, SEMICOLON, SLASH, STAR,
     // Single or two characters tokens(i.e., !=, ==, >=, etc.)
     BANG, BANG_EQUAL, EQUAL, EQUAL_EQUAL,
-    GREATER, GREATER_EQUAL, LESS, LESS_EQUAL,
+    GREATER, GREATER_EQUAL, LESS, LESS_EQUAL, MODULO,
     // Literals(i.e., strings, numbers, etc.)
     IDENTIFIER, STRING, NUMBER,
     // Builtin keywords(fn, if, else, etc.)
