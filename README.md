@@ -1,10 +1,10 @@
 # Mint
 Mint is an interpreted programming language written in modern C++(>=17). The Mint interpreter uses a _recursive descent_ parser(i.e., it starts with grammar expressions that have an higher precedence level over the others).  Mint shares a lot of functionalities with other high level programming languages, such as:
 - Dynamic typing;  
-- Basic control structures(such as _if-then-else_, _while_ and _for_);
-- Function declaration;
-- Support for the Object Oriented paradigm(class/object and inheritance);  
-- Function closures.
+- Arithmetical operations(+,-,*,/,%);  
+- Basic control structures(such as _if-then-else_, _while_ and _for_);  
+- Function declaration;  
+- Function closures.  
 
 The Mint interpreter is built following [Robert Nystrom's book: _"Crafting Interpreters"_](https://craftinginterpreters.com/), therefore the Mint programming language is heavily inspired by Lox.
 

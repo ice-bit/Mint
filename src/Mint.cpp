@@ -21,6 +21,11 @@ Interpreter interpreter;
 
 void Mint::run_file(const std::string &filepath) {
     std::fstream source_file(filepath, std::ios::in | std::ios::binary);
+    if(source_file.fail()) {
+        std::cerr << "Cannot open source file \"" << filepath << "\"." << std::endl;
+        std::exit(1);
+    }
+
     std::stringstream buf;
     uint8_t exit_code = 0;
 
