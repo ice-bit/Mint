@@ -27,7 +27,7 @@ Run Mint without parameters to open the REPL.
 ```
 You can either use Mint by the interactive REPL or by providing a source file. Do note that the REPL does not supports statements splitted into multiple lines. You can find a complete list of supported programs into the `examples/` directory. Here some of them:
 ### FizzBuzz
-```python
+```javascript
 for(let i = 0; i <= 100; i = i + 1) {
     if((i % 3 == 0) and (i % 5 == 0)) print "FizzBuzz";
     else if(i % 3 == 0) print "Fizz";
@@ -36,7 +36,7 @@ for(let i = 0; i <= 100; i = i + 1) {
 ```
 
 ### Iterative Fibonacci
-```python
+```javascript
 let a = 0;
 let b = 1;
 let tmp = a + b;
@@ -50,7 +50,7 @@ for(let i = 0; i < 19; i = i + 1) {
 ```
 
 ### Recursive Fibonacci
-```python
+```javascript
 fn fib(n) {
     if(n <= 2) return n;
 
@@ -63,7 +63,7 @@ for(let i = 0; i < 20; i = i + 1)
 ```
 
 ### Factiorial
-```python
+```javascript
 fn fact(n) {
     if(n == 0) return 1;
 
@@ -74,7 +74,7 @@ print fact(5); // 120
 ```
 
 ### Closure
-```python
+```javascript
 fn make_counter() {
     let count = 0;
 
@@ -96,7 +96,7 @@ while(i < 5) {
 ```
 
 ### Project euler - problem #1
-```python
+```javascript
 let sum = 0;
 
 for(let i = 0; i < 1000; i = i + 1) {
