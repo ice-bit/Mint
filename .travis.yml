@@ -1,6 +1,6 @@
 language: cpp
 os: linux
-ist: focal
+dist: focal
 
 compiler:
   - gcc
