@@ -1,4 +1,7 @@
 # Mint [![Build Status](https://app.travis-ci.com/ice-bit/Mint.svg?branch=master)](https://app.travis-ci.com/ice-bit/Mint)
+<div align="center">
+![](.mint.png)
+</div>
 Mint is an interpreted programming language written in modern C++(>=17). The Mint interpreter uses a _recursive descent_ parser(i.e., it starts with grammar expressions that have an higher precedence level over the others).  Mint shares a lot of functionalities with other high level programming languages, such as:
 - Dynamic typing;  
 - Support for basic arithmetical operations(`+`,`-`,`*`,`/`,`%`);  
