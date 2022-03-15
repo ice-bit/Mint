@@ -1,18 +1,11 @@
 language: cpp
 os: linux
 ist: focal
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - g++-7
 
 compiler:
   - gcc
   - clang
 
 script:
-  - export CXX=g++-7
   - cmake .
   - make
