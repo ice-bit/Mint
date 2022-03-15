@@ -4,7 +4,7 @@
 #include "Mint.h"
 
 auto helper() {
-    std::cout << "Mint interpreter. Usage \n" <<
+    std::cout << "Mint interpreter. Usage: \n" <<
                  "-f, --file [FILE]   | Run a Mint script\n" <<
                  "-a, --about         | About Mint\n" <<
                  "-h, --help          | Show this helper\n"

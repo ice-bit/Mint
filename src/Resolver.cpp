@@ -34,8 +34,7 @@ void Resolver::resolve_function(const std::shared_ptr<Function>& function, funct
 }
 
 void Resolver::begin_scope() {
-    // TODO: try embrace_back
-    scopes.push_back(std::map<std::string, bool>{});
+    scopes.emplace_back();
 }
 
 void Resolver::end_scope() {
