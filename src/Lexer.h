@@ -18,20 +18,20 @@ public:
     std::vector<Token> scan_tokens();
 
 private:
-    bool is_at_end();
-    void scan_token();
-    char advance();
-    void add_token(token_type type);
-    void add_token(token_type type, const std::any& literal);
-    bool match(char expected);
-    char peek();
-    void parse_string();
-    void parse_number();
-    static constexpr bool is_digit(char c);
-    static constexpr bool is_alpha(char c);
-    static constexpr bool is_alphanumeric(char c);
-    char peek_next();
-    void identifier();
+    auto is_at_end() -> bool;
+    auto scan_token() -> void;
+    auto advance() -> char;
+    auto add_token(token_type type) -> void;
+    auto add_token(token_type type, const std::any& literal) -> void;
+    auto match(char expected) -> bool;
+    auto peek() -> char;
+    auto parse_string() -> void;
+    auto parse_number() -> void;
+    static constexpr auto is_digit(char c) -> bool;
+    static constexpr auto is_alpha(char c) -> bool;
+    static constexpr auto is_alphanumeric(char c) -> bool;
+    auto peek_next() -> char;
+    auto identifier() -> void;
 
 
     std::vector<Token> tokens;

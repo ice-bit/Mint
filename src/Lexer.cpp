@@ -17,12 +17,12 @@ std::vector<Token> Lexer::scan_tokens() {
     return tokens;
 }
 
-bool Lexer::is_at_end() {
+auto Lexer::is_at_end() -> bool {
     return current >= source.size();
 }
 
-void Lexer::scan_token() {
-    char c = advance();
+auto Lexer::scan_token() -> void {
+    auto c = advance();
 
     switch (c) {
         case '(': add_token(token_type::LEFT_PAREN); break;
@@ -60,21 +60,21 @@ void Lexer::scan_token() {
     }
 }
 
-char Lexer::advance() {
+auto Lexer::advance() -> char {
     return source.at(current++);
 }
 
-void Lexer::add_token(token_type type) {
+auto Lexer::add_token(token_type type) -> void {
     add_token(type, std::string(""));
 }
 
-void Lexer::add_token(token_type type, const std::any& literal) {
+auto Lexer::add_token(token_type type, const std::any& literal) -> void {
     auto text = source.substr(start, current - start);
     Token token(type, text, literal, line);
     tokens.push_back(token);
 }
 
-bool Lexer::match(char expected) {
+auto Lexer::match(char expected) -> bool {
     if (is_at_end()) return false;
     if (source.at(current) != expected) return false;
     current++;
@@ -82,13 +82,13 @@ bool Lexer::match(char expected) {
     return true;
 }
 
-char Lexer::peek() {
+auto Lexer::peek() -> char {
     if(is_at_end()) return '\0';
 
     return source.at(current);
 }
 
-void Lexer::parse_string() {
+auto Lexer::parse_string() -> void {
     while(peek() != '"' && !is_at_end()) {
         if(peek() == '\n') line++;
         advance();
@@ -107,7 +107,7 @@ void Lexer::parse_string() {
 }
 
 
-void Lexer::parse_number() {
+auto Lexer::parse_number() -> void {
     while(isdigit(peek())) advance();
 
     if(peek() == '.' && is_digit(peek_next())) {
@@ -119,17 +119,17 @@ void Lexer::parse_number() {
     add_token(token_type::NUMBER, number);
 }
 
-constexpr bool Lexer::is_digit(const char c) {
+constexpr auto Lexer::is_digit(const char c) -> bool {
     return c >= '0' && c <= '9';
 }
 
-char Lexer::peek_next() {
+auto Lexer::peek_next() -> char {
     if(current - 1 >= source.size()) return '\0';
 
     return source.at(current + 1);
 }
 
-void Lexer::identifier() {
+auto Lexer::identifier() -> void {
     while(is_alphanumeric(peek())) advance();
     auto text = source.substr(start, current - start);
     auto found = keywords.find(text);
@@ -142,12 +142,12 @@ void Lexer::identifier() {
 }
 
 
-constexpr bool Lexer::is_alpha(const char c) {
+constexpr auto Lexer::is_alpha(const char c) -> bool {
     return (c >= 'a' && c <= 'z')
         || (c >= 'A' && c <= 'Z')
         || c == '_';
 }
 
-constexpr bool Lexer::is_alphanumeric(const char c) {
+constexpr auto Lexer::is_alphanumeric(const char c) -> bool {
     return is_alpha(c) || is_digit(c);
 }

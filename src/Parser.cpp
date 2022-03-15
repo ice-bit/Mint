@@ -16,11 +16,11 @@ std::vector<std::shared_ptr<Stmt>> Parser::parse() {
     return statements;
 }
 
-std::shared_ptr<Expr> Parser::expression() {
+auto Parser::expression() -> std::shared_ptr<Expr> {
     return assignment();
 }
 
-std::shared_ptr<Stmt> Parser::declaration() {
+auto Parser::declaration() -> std::shared_ptr<Stmt> {
     try {
         if(match(token_type::FN)) return function("function");
         if(match(token_type::LET)) return var_declaration();
@@ -31,7 +31,7 @@ std::shared_ptr<Stmt> Parser::declaration() {
     }
 }
 
-std::shared_ptr<Stmt> Parser::statement() {
+auto Parser::statement() -> std::shared_ptr<Stmt> {
     if(match(token_type::FOR)) return for_statement();
     if(match(token_type::IF)) return if_statement();
     if(match(token_type::PRINT)) return print_statement();
@@ -42,7 +42,7 @@ std::shared_ptr<Stmt> Parser::statement() {
     return expression_statement();
 }
 
-std::shared_ptr<Stmt> Parser::for_statement() {
+auto Parser::for_statement() -> std::shared_ptr<Stmt> {
     consume(token_type::LEFT_PAREN, "Expect '(' after for");
 
     std::shared_ptr<Stmt> initializer;
@@ -77,7 +77,7 @@ std::shared_ptr<Stmt> Parser::for_statement() {
     return body;
 }
 
-std::shared_ptr<Function> Parser::function(std::string kind) {
+auto Parser::function(std::string kind) -> std::shared_ptr<Function> {
     Token name = consume(token_type::IDENTIFIER, "Expect " + kind + " name.");
     consume(token_type::LEFT_PAREN, "Expect '(' after " + kind + " name.");
     std::vector<Token> parameters;
@@ -97,7 +97,7 @@ std::shared_ptr<Function> Parser::function(std::string kind) {
 }
 
 
-std::shared_ptr<Stmt> Parser::return_statement() {
+auto Parser::return_statement() -> std::shared_ptr<Stmt> {
     Token keyword = previous();
     std::shared_ptr<Expr> value = nullptr;
     if(!check(token_type::SEMICOLON)) value = expression();
@@ -107,7 +107,7 @@ std::shared_ptr<Stmt> Parser::return_statement() {
     return std::make_shared<Return>(keyword, value);
 }
 
-std::shared_ptr<Expr> Parser::call() {
+auto Parser::call() -> std::shared_ptr<Expr> {
     std::shared_ptr<Expr> expr = primary();
 
     while(true) {
@@ -118,7 +118,7 @@ std::shared_ptr<Expr> Parser::call() {
     return expr;
 }
 
-std::shared_ptr<Expr> Parser::finish_call(const std::shared_ptr<Expr>& callee) {
+auto Parser::finish_call(const std::shared_ptr<Expr>& callee) -> std::shared_ptr<Expr> {
     std::vector<std::shared_ptr<Expr>> arguments;
     if(!check(token_type::RIGHT_PAREN)) {
         do {
@@ -132,7 +132,7 @@ std::shared_ptr<Expr> Parser::finish_call(const std::shared_ptr<Expr>& callee) {
 
     return std::make_shared<Call>(callee, std::move(paren), std::move(arguments));
 }
-std::shared_ptr<Expr> Parser::and_expression() {
+auto Parser::and_expression() -> std::shared_ptr<Expr> {
     std::shared_ptr<Expr> expr = equality();
 
     while(match(token_type::AND)) {
@@ -143,7 +143,7 @@ std::shared_ptr<Expr> Parser::and_expression() {
 
     return expr;
 }
-std::shared_ptr<Expr> Parser::or_expression() {
+auto Parser::or_expression() -> std::shared_ptr<Expr> {
     std::shared_ptr<Expr> expr = and_expression();
 
     while(match(token_type::OR)) {
@@ -155,14 +155,14 @@ std::shared_ptr<Expr> Parser::or_expression() {
     return expr;
 }
 
-std::shared_ptr<Stmt> Parser::expression_statement() {
+auto Parser::expression_statement() -> std::shared_ptr<Stmt> {
     std::shared_ptr<Expr> expr = expression();
     consume(token_type::SEMICOLON, "Expect ';' after expression.");
 
     return std::make_shared<Expression>(expr);
 }
 
-std::shared_ptr<Stmt> Parser::if_statement() {
+auto Parser::if_statement() -> std::shared_ptr<Stmt> {
     consume(token_type::LEFT_PAREN, "Expect '(' after if.");
     std::shared_ptr<Expr> cond = expression();
     consume(token_type::RIGHT_PAREN, "Expect ')' after if condition.");
@@ -174,7 +174,7 @@ std::shared_ptr<Stmt> Parser::if_statement() {
     return std::make_shared<If>(cond, then_branch, else_branch);
 }
 
-std::shared_ptr<Stmt> Parser::while_statement() {
+auto Parser::while_statement() -> std::shared_ptr<Stmt> {
     consume(token_type::LEFT_PAREN, "Expect '(' after while.");
     std::shared_ptr<Expr> cond = expression();
     consume(token_type::RIGHT_PAREN, "Expect ')' after condition.");
@@ -183,14 +183,14 @@ std::shared_ptr<Stmt> Parser::while_statement() {
     return std::make_shared<While>(cond, body);
 }
 
-std::shared_ptr<Stmt> Parser::print_statement() {
+auto Parser::print_statement() -> std::shared_ptr<Stmt> {
     auto value = expression();
     consume(token_type::SEMICOLON, "Expect ';' after value.");
 
     return std::make_shared<Print>(value);
 }
 
-std::shared_ptr<Stmt> Parser::var_declaration() {
+auto Parser::var_declaration() -> std::shared_ptr<Stmt> {
     auto name = consume(token_type::IDENTIFIER, "Expect variable name.");
 
     std::shared_ptr<Expr> initializer = nullptr;
@@ -201,7 +201,7 @@ std::shared_ptr<Stmt> Parser::var_declaration() {
     return std::make_shared<Var>(std::move(name), initializer);
 }
 
-std::vector<std::shared_ptr<Stmt>> Parser::block() {
+auto Parser::block() -> std::vector<std::shared_ptr<Stmt>> {
     std::vector<std::shared_ptr<Stmt>> statements;
 
     while(!check(token_type::RIGHT_BRACE) && !is_at_end())
@@ -213,7 +213,7 @@ std::vector<std::shared_ptr<Stmt>> Parser::block() {
 }
 
 
-std::shared_ptr<Expr> Parser::assignment() {
+auto Parser::assignment() -> std::shared_ptr<Expr> {
     auto expr = or_expression();
 
     if(match(token_type::EQUAL)) {
@@ -231,7 +231,7 @@ std::shared_ptr<Expr> Parser::assignment() {
     return expr;
 }
 
-std::shared_ptr<Expr> Parser::equality() {
+auto Parser::equality() -> std::shared_ptr<Expr> {
     auto expr = comparison();
 
     while(match(token_type::BANG_EQUAL, token_type::EQUAL_EQUAL)) {
@@ -243,7 +243,7 @@ std::shared_ptr<Expr> Parser::equality() {
     return expr;
 }
 
-std::shared_ptr<Expr> Parser::comparison() {
+auto Parser::comparison() -> std::shared_ptr<Expr> {
     auto expr = term();
 
     while(match(token_type::GREATER, token_type::GREATER_EQUAL, token_type::LESS, token_type::LESS_EQUAL)) {
@@ -255,7 +255,7 @@ std::shared_ptr<Expr> Parser::comparison() {
     return expr;
 }
 
-std::shared_ptr<Expr> Parser::term() {
+auto Parser::term() -> std::shared_ptr<Expr> {
     auto expr = factor();
 
     while(match(token_type::MINUS, token_type::PLUS)) {
@@ -267,7 +267,7 @@ std::shared_ptr<Expr> Parser::term() {
     return expr;
 }
 
-std::shared_ptr<Expr> Parser::factor() {
+auto Parser::factor() -> std::shared_ptr<Expr> {
     auto expr = unary();
 
     while(match(token_type::SLASH, token_type::STAR, token_type::MODULO)) {
@@ -279,7 +279,7 @@ std::shared_ptr<Expr> Parser::factor() {
     return expr;
 }
 
-std::shared_ptr<Expr> Parser::unary() {
+auto Parser::unary() -> std::shared_ptr<Expr> {
     if(match(token_type::BANG, token_type::MINUS)) {
         auto op = previous();
         auto right = unary();
@@ -289,7 +289,7 @@ std::shared_ptr<Expr> Parser::unary() {
     return call();
 }
 
-std::shared_ptr<Expr> Parser::primary() {
+auto Parser::primary() -> std::shared_ptr<Expr>  {
     if(match(token_type::FALSE)) return std::make_shared<Literal>(false);
     if(match(token_type::TRUE)) return std::make_shared<Literal>(true);
     if(match(token_type::NIL)) return std::make_shared<Literal>(nullptr);
@@ -310,7 +310,7 @@ std::shared_ptr<Expr> Parser::primary() {
 }
 
 template <class... T>
-bool Parser::match(T... type) {
+auto Parser::match(T... type) -> bool {
     assert((... && std::is_same_v<T, token_type>));
 
     if((... || check(type))) {
@@ -327,38 +327,38 @@ Token Parser::consume(token_type type, std::string msg) {
     throw error(peek(), msg);
 }
 
-bool Parser::check(token_type type) {
+auto Parser::check(token_type type) -> bool {
     if(is_at_end()) return false;
 
     return peek().type == type;
 }
 
 
-Token Parser::advance() {
+auto Parser::advance() -> Token {
     if(!is_at_end()) ++current;
 
     return previous();
 }
 
-bool Parser::is_at_end() {
+auto Parser::is_at_end() -> bool{
     return peek().type == token_type::MINT_EOF;
 }
 
-Token Parser::peek() {
+auto Parser::peek() -> Token {
     return tokens.at(current);
 }
 
-Token Parser::previous() {
+auto Parser::previous() -> Token {
     return tokens.at(current - 1);
 }
 
-Parser::ParseError Parser::error(const Token &token, const std::string& msg) {
+auto Parser::error(const Token &token, const std::string& msg) -> Parser::ParseError {
    Mint::error(token, msg);
 
    return ParseError{""};
 }
 
-void Parser::synchronize() {
+auto Parser::synchronize() -> void {
     advance();
 
     while(!is_at_end()) {

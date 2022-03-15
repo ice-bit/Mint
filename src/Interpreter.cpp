@@ -15,7 +15,7 @@
 
 Interpreter::Interpreter() = default;
 
-void Interpreter::interpret(const std::vector<std::shared_ptr<Stmt>>& statements) {
+auto Interpreter::interpret(const std::vector<std::shared_ptr<Stmt>>& statements) -> void {
     try {
         for(const auto &statement : statements)
             execute(statement);
@@ -24,12 +24,12 @@ void Interpreter::interpret(const std::vector<std::shared_ptr<Stmt>>& statements
     }
 }
 
-void Interpreter::resolve(const std::shared_ptr<Expr>& expr, const int depth) {
+auto Interpreter::resolve(const std::shared_ptr<Expr>& expr, const int depth) -> void {
     locals[expr] = depth;
 }
 
-void Interpreter::execute_block(const std::vector<std::shared_ptr<Stmt>>& statements,
-                                std::shared_ptr<Environment> env) {
+auto Interpreter::execute_block(const std::vector<std::shared_ptr<Stmt>>& statements,
+                                std::shared_ptr<Environment> env) -> void {
     std::shared_ptr<Environment> previous = this->environment;
     try {
         this->environment = std::move(env);
@@ -44,15 +44,15 @@ void Interpreter::execute_block(const std::vector<std::shared_ptr<Stmt>>& statem
     this->environment = previous;
 }
 
-void Interpreter::execute(const std::shared_ptr<Stmt>& stmt) {
+auto Interpreter::execute(const std::shared_ptr<Stmt>& stmt) -> void {
     stmt->accept(*this);
 }
 
-std::any Interpreter::evaluate(const std::shared_ptr<Expr>& expr) {
+auto Interpreter::evaluate(const std::shared_ptr<Expr>& expr) {
     return expr->accept(*this);
 }
 
-std::any Interpreter::lookup_variable(const Token& name, const std::shared_ptr<Expr>& expr) {
+auto Interpreter::lookup_variable(const Token& name, const std::shared_ptr<Expr>& expr) {
     auto elem = locals.find(expr);
     if(elem != locals.end()) {
         auto distance = elem->second;
@@ -226,18 +226,18 @@ std::any Interpreter::visit_while_stmt(std::shared_ptr<While> stmt) {
     return {};
 }
 
-void Interpreter::check_number_operand(const Token &op, const std::any &operand) {
+auto Interpreter::check_number_operand(const Token &op, const std::any &operand) -> void {
     if(operand.type() == typeid(double)) return;
     throw RuntimeError(op, "Operand must be a number.");
 }
 
-void Interpreter::check_number_operands(const Token &op, const std::any &left, const std::any &right) {
+auto Interpreter::check_number_operands(const Token &op, const std::any &left, const std::any &right) -> void {
     if(left.type() == typeid(double) && right.type() == typeid(double)) return;
 
     throw RuntimeError(op, "Operands must be numbers.");
 }
 
-bool Interpreter::is_truthy(const std::any &object) {
+auto Interpreter::is_truthy(const std::any &object) -> bool {
     if(object.type() == typeid(nullptr)) return false;
     if(object.type() == typeid(bool))
         return std::any_cast<bool>(object);
@@ -245,7 +245,7 @@ bool Interpreter::is_truthy(const std::any &object) {
     return true;
 }
 
-bool Interpreter::is_equal(const std::any &a, const std::any &b) {
+auto Interpreter::is_equal(const std::any &a, const std::any &b) -> bool {
     if(a.type() == typeid(nullptr) && b.type() == typeid(nullptr)) return true;
     if(a.type() == typeid(nullptr)) return false;
     if(a.type() == typeid(std::string) && b.type() == typeid(std::string))
