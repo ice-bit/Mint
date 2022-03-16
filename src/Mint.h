@@ -12,14 +12,14 @@
 
 class Mint {
 public:
-    static void run_file(const std::string& filepath);
-    static void error(unsigned int line, const std::string& msg);
-    static void error(const Token& token, const std::string& msg);
-    static void runtime_error(const RuntimeError& err);
-    [[noreturn]] static void run_prompt();
+    static auto run_file(const std::string& filepath) -> void;
+    static auto error(unsigned int line, const std::string& msg) -> void;
+    static auto error(const Token& token, const std::string& msg) -> void;
+    static auto runtime_error(const RuntimeError& err) -> void;
+    [[noreturn]] static auto run_prompt() -> void;
 private:
-    static void run(std::string source);
-    static void report(unsigned int line, const std::string& pos, const std::string& reason);
+    static auto run(std::string source) -> void;
+    static auto report(unsigned int line, const std::string& pos, const std::string& reason) -> void;
     static bool had_error;
     static bool had_runtime_error;
 };

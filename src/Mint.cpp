@@ -19,7 +19,7 @@ bool Mint::had_error = false;
 bool Mint::had_runtime_error = false;
 Interpreter interpreter;
 
-void Mint::run_file(const std::string &filepath) {
+auto Mint::run_file(const std::string &filepath) -> void {
     std::fstream source_file(filepath, std::ios::in | std::ios::binary);
     if(source_file.fail()) {
         std::cerr << "Cannot open source file \"" << filepath << "\"." << std::endl;
@@ -40,11 +40,11 @@ void Mint::run_file(const std::string &filepath) {
 }
 
 
-void Mint::run(std::string source) {
+auto Mint::run(std::string source) -> void {
     auto lexer(new Lexer(std::move(source)));
     auto tokens = lexer->scan_tokens();
     Parser parser{tokens};
-    std::vector<std::shared_ptr<Stmt>> statements = parser.parse();
+    auto statements = parser.parse();
     // Catch syntax errors(managed by the parser)
     if(had_error) return;
 
@@ -57,7 +57,7 @@ void Mint::run(std::string source) {
     interpreter.interpret(statements);
 }
 
-void Mint::run_prompt() {
+auto Mint::run_prompt() -> void {
     std::string user_input;
 
     while(true) {
@@ -68,23 +68,23 @@ void Mint::run_prompt() {
     }
 }
 
-void Mint::error(unsigned int line, const std::string &msg) {
+auto Mint::error(unsigned int line, const std::string &msg) -> void {
     report(line, "", msg);
 }
 
-void Mint::error(const Token& token, const std::string& msg) {
+auto Mint::error(const Token& token, const std::string& msg) -> void {
     if(token.type == token_type::MINT_EOF)
         report(token.line, " at end", msg);
     else
         report(token.line, " at '" + token.lexeme + "'", msg);
 }
 
-void Mint::report(unsigned int line, const std::string &pos, const std::string& reason) {
+auto Mint::report(unsigned int line, const std::string &pos, const std::string& reason) -> void {
     std::cerr << "[Line " << line << "] Error" << pos << ": " << reason << std::endl;
     had_error = true;
 }
 
-void Mint::runtime_error(const RuntimeError &err) {
+auto Mint::runtime_error(const RuntimeError &err) -> void {
     std::cerr << "[Line " << err.token.line << "] " << err.what() << std::endl;
     had_runtime_error = true;
 }

@@ -7,19 +7,19 @@
 
 #define UNUSED(x) (void)(x)
 
-void Resolver::resolve(const std::vector<std::shared_ptr<Stmt>> &statements) {
+auto Resolver::resolve(const std::vector<std::shared_ptr<Stmt>> &statements) -> void {
     for(auto& stmt : statements) resolve(stmt);
 }
 
-void Resolver::resolve(const std::shared_ptr<Stmt>& stmt) {
+auto Resolver::resolve(const std::shared_ptr<Stmt>& stmt) -> void {
     stmt->accept(*this);
 }
 
-void Resolver::resolve(const std::shared_ptr<Expr>& expr) {
+auto Resolver::resolve(const std::shared_ptr<Expr>& expr) -> void {
     expr->accept(*this);
 }
 
-void Resolver::resolve_function(const std::shared_ptr<Function>& function, function_type type) {
+auto Resolver::resolve_function(const std::shared_ptr<Function>& function, function_type type) -> void {
     function_type enclosing_fun = current_fun;
     current_fun = type;
 
@@ -33,15 +33,15 @@ void Resolver::resolve_function(const std::shared_ptr<Function>& function, funct
     current_fun = enclosing_fun;
 }
 
-void Resolver::begin_scope() {
+auto Resolver::begin_scope() -> void {
     scopes.emplace_back();
 }
 
-void Resolver::end_scope() {
+auto Resolver::end_scope() -> void {
     scopes.pop_back();
 }
 
-void Resolver::declare(const Token &name) {
+auto Resolver::declare(const Token &name) -> void {
     if(scopes.empty()) return;
 
     auto& scope = scopes.back();
@@ -51,12 +51,12 @@ void Resolver::declare(const Token &name) {
     scope[name.lexeme] = false;
 }
 
-void Resolver::define(const Token &name) {
+auto Resolver::define(const Token &name) -> void {
     if(scopes.empty()) return;
     scopes.back()[name.lexeme] = true;
 }
 
-void Resolver::resolve_local(const std::shared_ptr<Expr>& expr, const Token &name) {
+auto Resolver::resolve_local(const std::shared_ptr<Expr>& expr, const Token &name) -> void {
     for(auto i = (signed)scopes.size()-1; i >= 0; i--) {
         if(scopes[i].find(name.lexeme) != scopes[i].end()) {
             interpreter.resolve(expr, (signed)(scopes.size() - 1 - i));

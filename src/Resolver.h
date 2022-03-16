@@ -37,14 +37,14 @@ private:
         NONE,
         FUNCTION
     };
-    void resolve(const std::shared_ptr<Stmt>& stmt);
-    void resolve(const std::shared_ptr<Expr>& expr);
-    void resolve_function(const std::shared_ptr<Function>& function, function_type type);
-    void begin_scope();
-    void end_scope();
-    void declare(const Token& name);
-    void define(const Token& name);
-    void resolve_local(const std::shared_ptr<Expr>& expr, const Token& name);
+    auto resolve(const std::shared_ptr<Stmt>& stmt) -> void;
+    auto resolve(const std::shared_ptr<Expr>& expr) -> void;
+    auto resolve_function(const std::shared_ptr<Function>& function, function_type type) -> void;
+    auto begin_scope() -> void;
+    auto end_scope() -> void;
+    auto declare(const Token& name) -> void;
+    auto define(const Token& name) -> void;
+    auto resolve_local(const std::shared_ptr<Expr>& expr, const Token& name) -> void;
 
     Interpreter& interpreter;
     std::vector<std::map<std::string, bool>> scopes;

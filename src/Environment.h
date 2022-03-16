@@ -15,12 +15,12 @@ friend class Interpreter;
 public:
     Environment() : enclosing(nullptr) {};
     explicit Environment(std::shared_ptr<Environment> enclosing) : enclosing(std::move(enclosing)) {};
-    std::any get(const Token& name);
-    void assign(const Token& name, std::any value);
-    void define(const std::string& name, std::any value);
-    void assign_at(unsigned int distance, const Token& name, std::any value);
-    std::shared_ptr<Environment> ancestor(unsigned int distance);
-    std::any get_at(unsigned int distance, const std::string& name);
+    auto get(const Token& name) -> std::any;
+    auto assign(const Token& name, std::any value) -> void;
+    auto define(const std::string& name, std::any value) -> void;
+    auto assign_at(unsigned int distance, const Token& name, std::any value) -> void;
+    auto ancestor(unsigned int distance) -> std::shared_ptr<Environment>;
+    auto get_at(unsigned int distance, const std::string& name) -> std::any;
 private:
     std::shared_ptr<Environment> enclosing;
     std::map<std::string, std::any> values;

@@ -30,7 +30,7 @@ auto Interpreter::resolve(const std::shared_ptr<Expr>& expr, const int depth) ->
 
 auto Interpreter::execute_block(const std::vector<std::shared_ptr<Stmt>>& statements,
                                 std::shared_ptr<Environment> env) -> void {
-    std::shared_ptr<Environment> previous = this->environment;
+    auto previous = this->environment;
     try {
         this->environment = std::move(env);
 
@@ -61,8 +61,8 @@ auto Interpreter::lookup_variable(const Token& name, const std::shared_ptr<Expr>
 }
 
 std::any Interpreter::visit_binary_expr(std::shared_ptr<Binary> expr)  {
-    std::any left = evaluate(expr->left);
-    std::any right = evaluate(expr->right);
+    auto left = evaluate(expr->left);
+    auto right = evaluate(expr->right);
 
     switch (expr->op.type) {
         case token_type::BANG_EQUAL: return !is_equal(left, right);
@@ -129,7 +129,7 @@ std::any Interpreter::visit_logical_expr(std::shared_ptr<Logical> expr) {
 }
 
 std::any Interpreter::visit_unary_expr(std::shared_ptr<Unary> expr) {
-    std::any right = evaluate(expr->right);
+    auto right = evaluate(expr->right);
 
     switch (expr->op.type) {
         case token_type::BANG: return !is_truthy(right);
@@ -194,7 +194,7 @@ std::any Interpreter::visit_expression_stmt(std::shared_ptr<Expression> stmt) {
 }
 
 std::any Interpreter::visit_print_stmt(std::shared_ptr<Print> stmt) {
-    std::any value = evaluate(stmt->expression);
+    auto value = evaluate(stmt->expression);
     std::cout << stringify(value) << std::endl;
 
     return {};
@@ -261,7 +261,7 @@ auto Interpreter::is_equal(const std::any &a, const std::any &b) -> bool {
 std::string Interpreter::stringify(const std::any &object) {
     if(object.type() == typeid(nullptr)) return "nil";
     if(object.type() == typeid(double)) {
-        std::string text = std::to_string(std::any_cast<double>(object));
+        auto text = std::to_string(std::any_cast<double>(object));
         if(text[text.length() - 2] == '.' && text[text.length() - 1] == '0')
             text = text.substr(0, text.length() - 2);
 
