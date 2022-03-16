@@ -60,12 +60,14 @@ auto Mint::run(std::string source) -> void {
 auto Mint::run_prompt() -> void {
     std::string user_input;
 
-    while(true) {
-        std::cout << "λ> ";
-        std::getline(std::cin, user_input);
+    std::cout << "> ";
+    while(std::getline(std::cin, user_input)) {
         run(user_input);
         had_error = false;
+        std::cout << "> ";
     }
+
+    std::cout << std::endl << "Exiting..." << std::endl;
 }
 
 auto Mint::error(unsigned int line, const std::string &msg) -> void {
