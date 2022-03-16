@@ -1,4 +1,4 @@
-# Mint [![Build Status](https://app.travis-ci.com/ice-bit/Mint.svg?branch=master)](https://app.travis-ci.com/ice-bit/Mint)
+# Mint [![Build Status](https://app.travis-ci.com/ice-bit/Mint.svg?branch=master)](https://app.travis-ci.com/ice-bit/Mint) [![CodeFactor](https://www.codefactor.io/repository/github/ice-bit/mint/badge)](https://www.codefactor.io/repository/github/ice-bit/mint)
 
 <div align="center">
     <img src=".mint.png" />
