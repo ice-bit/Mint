@@ -4,18 +4,18 @@
     <img src=".mint.png" />
 </div>
 
-Mint is an interpreted programming language written in modern C++(>=17). The Mint interpreter uses a _recursive descent_ parser(i.e., it starts with grammar expressions that have an higher precedence level over the others).  Mint shares a lot of functionalities with other high level programming languages, such as:
+Mint is a _tree-walking_ interpreter written in modern C++(>=17) for a subset of the Javascript programming language. The Mint interpreter is built using a simple _recursive descent_ parser. Mint shares a lot of functionalities with other high level programming languages, such as:
 - Dynamic typing;  
 - Support for basic arithmetical operations(`+`,`-`,`*`,`/`,`%`);  
 - Basic control structures(such as _if-then-else_, _while_ and _for_);  
 - Function declaration;  
 - Function closures.  
 
-The Mint interpreter is built following [Robert Nystrom's book: _"Crafting Interpreters"_](https://craftinginterpreters.com/), therefore the Mint programming language is heavily inspired by Lox.
+The Mint interpreter is built following [Robert Nystrom's book: _"Crafting Interpreters"_](https://craftinginterpreters.com/).
 
 
 ## Building
-Mint is written in modern C++ from scratch without using any additional library. In order to build it, you will need a modern C++ compiler(GCC, clang, MSVC, etc.) installed in your machine and a recent version of cmake(>= 3.21). Once installed, type the following commands(note: these instructions might not work under non-POSIX environments):
+Mint is written in modern C++ from scratch without using any additional library. In order to build it, you will need a modern C++ compiler(GCC, clang, MSVC, etc.) installed in your machine and a recent version of cmake(>= 3.12). Once installed, type the following commands(note: these instructions might not work under non-POSIX environments):
 ```sh
 $> mkdir build && cd build
 $> cmake ..
@@ -56,7 +56,7 @@ for(let i = 0; i < 19; i = i + 1) {
 
 ### Recursive Fibonacci
 ```javascript
-fn fib(n) {
+function fib(n) {
     if(n <= 2) return n;
 
     return fib(n - 2) + fib(n - 1);
@@ -69,7 +69,7 @@ for(let i = 0; i < 20; i = i + 1)
 
 ### Factiorial
 ```javascript
-fn fact(n) {
+function fact(n) {
     if(n == 0) return 1;
 
     return fact(n-1) * n;
@@ -80,7 +80,7 @@ print fact(5); // 120
 
 ### Closure
 ```javascript
-fn make_counter() {
+function make_counter() {
     let count = 0;
 
     fn counter() {
@@ -116,9 +116,9 @@ print sum;
 Mint is quite fast for a three-walking interpreter, below you can find a table with some benchmarks:
 | Command                    | Description                                                           | Timing           |
 |----------------------------|-----------------------------------------------------------------------|------------------|
-| `Mint -f fibonacci_rec.mn` | Computing the first 35 numbers of the Fibonacci sequence recursively. | 422.58s(7:03.72) |
-| `Mint -f fibonacci_it.mn`  | Computing the first 35 numbers of the Fibonacci sequence iteratively. | 3 ms             |
-| `Mint -f factorial.mn`     | Computing the factorial of 150 recursively.                           | 11 ms            |
+| `Mint -f fibonacci_rec.js` | Computing the first 35 numbers of the Fibonacci sequence recursively. | 422.58s(7:03.72) |
+| `Mint -f fibonacci_it.js`  | Computing the first 35 numbers of the Fibonacci sequence iteratively. | 3 ms             |
+| `Mint -f factorial.js`     | Computing the factorial of 150 recursively.                           | 11 ms            |
 
 
 

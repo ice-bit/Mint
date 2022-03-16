@@ -19,8 +19,8 @@ enum class token_type {
     // Literals(i.e., strings, numbers, etc.)
     IDENTIFIER, STRING, NUMBER,
     // Builtin keywords(fn, if, else, etc.)
-    AND, CLASS, ELSE, FALSE, FN, FOR, IF, NIL, OR,
-    PRINT, RETURN, SUPER, THIS, TRUE, LET, WHILE,
+    AND, ELSE, FALSE, FN, FOR, IF, NIL, OR,
+    PRINT, RETURN, TRUE, LET, WHILE,
     // End of file
     MINT_EOF
 };

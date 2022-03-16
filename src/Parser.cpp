@@ -365,7 +365,6 @@ auto Parser::synchronize() -> void {
         if(previous().type == token_type::SEMICOLON) return;
 
         switch (peek().type) {
-            case token_type::CLASS:
             case token_type::FN:
             case token_type::LET:
             case token_type::FOR:

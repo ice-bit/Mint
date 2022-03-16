@@ -1,7 +1,7 @@
-fn make_counter() {
+function make_counter() {
     let count = 0;
 
-    fn counter() {
+    function counter() {
         count = count + 1;
         return count;
     }
