@@ -6,4 +6,4 @@ function fib(n) {
 
 
 for(let i = 0; i < 20; i = i + 1)
-    print(fib(i));
+    print fib(i);
