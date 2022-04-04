@@ -7,5 +7,7 @@ compiler:
   - clang
 
 script:
+  - git submodule update --init --recursive
   - cmake .
   - make
+  - ./tests/src/mint_test
