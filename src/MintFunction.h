@@ -10,7 +10,7 @@
 #include "MintCallable.h"
 
 class Environment;
-class Function;
+struct Function;
 
 class MintReturn {
 public:

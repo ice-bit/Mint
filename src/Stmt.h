@@ -36,6 +36,7 @@ public:
 class Stmt {
 public:
     virtual std::any accept(StmtVisitor& visitor) = 0;
+    virtual ~Stmt() = default;
 };
 
 struct Block : Stmt, public std::enable_shared_from_this<Block> {
