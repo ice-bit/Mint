@@ -6,6 +6,7 @@
 #include <sstream>
 #include <iostream>
 #include <memory>
+#include <algorithm>
 
 #include "Mint.h"
 #include "Lexer.h"
