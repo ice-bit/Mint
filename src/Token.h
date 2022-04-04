@@ -30,7 +30,7 @@ class Token {
 public:
     Token(token_type type, std::string lexeme, std::any literal, unsigned int line)
         : type(type), literal(std::move(literal)), lexeme(std::move(lexeme)), line(line) {};
-    [[nodiscard]] std::string to_string() const;
+    [[nodiscard]] auto to_string() -> std::string const;
 
     const token_type type;
     const std::any literal;

@@ -2,9 +2,7 @@
 // Created by marco on 3/8/22.
 //
 
-#ifndef MINT_LEXER_H
-#define MINT_LEXER_H
-
+#pragma once
 #include <string>
 #include <utility>
 #include <vector>
@@ -57,6 +55,3 @@ private:
             {"while", token_type::WHILE},
     };
 };
-
-
-#endif //MINT_LEXER_H

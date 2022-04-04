@@ -4,7 +4,7 @@
 
 #include "Token.h"
 
-std::string Token::to_string() const {
+auto Token::to_string() -> std::string const {
     std::string literal_str;
 
     switch (type) {
