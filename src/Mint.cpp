@@ -59,9 +59,18 @@ auto Mint::run(std::string source) -> void {
 
 auto Mint::run_prompt() -> void {
     std::string user_input;
+    const auto e_kws = {
+        "exit", "exit;", ".exit",
+        "quit", "quit;", ".quit",
+        ":q",
+    };
 
     std::cout << "> ";
     while(std::getline(std::cin, user_input)) {
+        if(std::find(e_kws.begin(), e_kws.end(), user_input) != e_kws.end()) {
+            std::cout << "Exiting..." << std::endl;
+            std::exit(0);
+        }
         run(user_input);
         had_error = false;
         std::cout << "> ";

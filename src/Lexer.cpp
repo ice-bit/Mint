@@ -35,13 +35,25 @@ auto Lexer::scan_token() -> void {
         case '+': add_token(token_type::PLUS); break;
         case ';': add_token(token_type::SEMICOLON); break;
         case '*': add_token(token_type::STAR); break;
+        case '^': add_token(token_type::XOR); break;
+        case '~': add_token(token_type::NOT); break;
         case '%': add_token(token_type::MODULO); break;
         case '&': add_token(match('&') ? token_type::AND : token_type::BIT_AND); break;
         case '|': add_token(match('|') ? token_type::OR : token_type::BIT_OR); break;
         case '!': add_token(match('=') ? token_type::BANG_EQUAL : token_type::BANG); break;
         case '=': add_token(match('=') ? token_type::EQUAL_EQUAL : token_type::EQUAL); break;
-        case '<': add_token(match('=') ? token_type::LESS_EQUAL : token_type::LESS); break;
-        case '>': add_token(match('=') ? token_type::GREATER_EQUAL : token_type::GREATER); break;
+        case '<': {
+            if(match('<')) add_token(token_type::LEFT_SHIFT);
+            else if(match('=')) add_token(token_type::LESS_EQUAL);
+            else add_token(token_type::LESS);
+        }
+        break;
+        case '>': {
+            if(match('>')) add_token(token_type::RIGHT_SHIFT);
+            else if(match('=')) add_token(token_type::GREATER_EQUAL);
+            else add_token(token_type::GREATER);
+        }
+        break;
         case '/': {
                 if(match('/'))
                     while(peek() != '\n' && !is_at_end())

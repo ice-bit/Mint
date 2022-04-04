@@ -33,7 +33,6 @@ private:
     auto peek_next() -> char;
     auto identifier() -> void;
 
-
     std::vector<Token> tokens;
     unsigned int start = 0;
     unsigned int current = 0;
@@ -42,6 +41,8 @@ private:
     const std::map<std::string, token_type> keywords = {
             {"&&", token_type::AND},
             {"||", token_type::OR},
+            {"^", token_type::XOR},
+            {"~", token_type::NOT},
             {"else", token_type::ELSE},
             {"false", token_type::FALSE},
             {"for", token_type::FOR},

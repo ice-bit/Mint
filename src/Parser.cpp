@@ -270,7 +270,14 @@ auto Parser::term() -> std::shared_ptr<Expr> {
 auto Parser::factor() -> std::shared_ptr<Expr> {
     auto expr = unary();
 
-    while(match(token_type::SLASH, token_type::STAR, token_type::MODULO)) {
+    while(match(token_type::SLASH,
+                token_type::STAR,
+                token_type::MODULO,
+                token_type::BIT_AND,
+                token_type::BIT_OR,
+                token_type::XOR,
+                token_type::LEFT_SHIFT,
+                token_type::RIGHT_SHIFT)) {
         Token op = previous();
         auto right = unary();
         expr = std::make_shared<Binary>(expr, std::move(op), right);
@@ -280,7 +287,7 @@ auto Parser::factor() -> std::shared_ptr<Expr> {
 }
 
 auto Parser::unary() -> std::shared_ptr<Expr> {
-    if(match(token_type::BANG, token_type::MINUS)) {
+    if(match(token_type::BANG, token_type::MINUS, token_type::NOT)) {
         auto op = previous();
         auto right = unary();
         return std::make_shared<Unary>(std::move(op), right);

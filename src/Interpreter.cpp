@@ -101,6 +101,41 @@ std::any Interpreter::visit_binary_expr(std::shared_ptr<Binary> expr)  {
             auto right_expr = std::any_cast<double>(right);
             return std::fmod(left_exp, right_expr);
         }
+        case token_type::BIT_AND: {
+            check_number_operands(expr->op, left, right);
+            auto left_exp = std::any_cast<double>(left);
+            auto right_expr = std::any_cast<double>(right);
+
+            return ((long)left_exp & (long)right_expr);
+        }
+        case token_type::BIT_OR: {
+            check_number_operands(expr->op, left, right);
+            auto left_expr = std::any_cast<double>(left);
+            auto right_expr = std::any_cast<double>(right);
+
+            return ((long)left_expr | (long)right_expr);
+        }
+        case token_type::XOR: {
+            check_number_operands(expr->op, left, right);
+            auto left_expr = std::any_cast<double>(left);
+            auto right_expr = std::any_cast<double>(right);
+
+            return ((long)left_expr ^ (long)right_expr);
+        }
+        case token_type::LEFT_SHIFT: {
+            check_number_operands(expr->op, left, right);
+            auto left_expr = std::any_cast<double>(left);
+            auto right_expr = std::any_cast<double>(right);
+
+            return ((long)left_expr << (long)right_expr);
+        }
+        case token_type::RIGHT_SHIFT: {
+            check_number_operands(expr->op, left, right);
+            auto left_expr = std::any_cast<double>(left);
+            auto right_expr = std::any_cast<double>(right);
+
+            return ((long)left_expr >> (long)right_expr);
+        }
         default: break;
     }
 
@@ -136,6 +171,9 @@ std::any Interpreter::visit_unary_expr(std::shared_ptr<Unary> expr) {
         case token_type::MINUS:
             check_number_operand(expr->op, right);
             return -std::any_cast<double>(right);
+        case token_type::NOT:
+            check_number_operand(expr->op, right);
+            return ~(long)std::any_cast<double>(right);
         default: break;
     }
 
@@ -267,7 +305,8 @@ std::string Interpreter::stringify(const std::any &object) {
 
         return text;
     }
-
+    if(object.type() == typeid(long))
+        return std::to_string(std::any_cast<long>(object));
     if(object.type() == typeid(std::string))
         return std::any_cast<std::string>(object);
     if(object.type() == typeid(bool))
