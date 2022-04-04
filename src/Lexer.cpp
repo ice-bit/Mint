@@ -5,7 +5,7 @@
 #include "Lexer.h"
 #include "Mint.h"
 
-std::vector<Token> Lexer::scan_tokens() {
+auto Lexer::scan_tokens() -> std::vector<Token> {
     while(!is_at_end()) {
         start = current;
         scan_token();
@@ -36,6 +36,8 @@ auto Lexer::scan_token() -> void {
         case ';': add_token(token_type::SEMICOLON); break;
         case '*': add_token(token_type::STAR); break;
         case '%': add_token(token_type::MODULO); break;
+        case '&': add_token(match('&') ? token_type::AND : token_type::BIT_AND); break;
+        case '|': add_token(match('|') ? token_type::OR : token_type::BIT_OR); break;
         case '!': add_token(match('=') ? token_type::BANG_EQUAL : token_type::BANG); break;
         case '=': add_token(match('=') ? token_type::EQUAL_EQUAL : token_type::EQUAL); break;
         case '<': add_token(match('=') ? token_type::LESS_EQUAL : token_type::LESS); break;

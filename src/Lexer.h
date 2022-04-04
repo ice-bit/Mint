@@ -15,7 +15,7 @@
 class Lexer {
 public:
     explicit Lexer(std::string source) : source(std::move(source)) {};
-    std::vector<Token> scan_tokens();
+    auto scan_tokens() -> std::vector<Token>;
 
 private:
     auto is_at_end() -> bool;
@@ -40,8 +40,8 @@ private:
     unsigned int line = 1;
     std::string source;
     const std::map<std::string, token_type> keywords = {
-            {"and", token_type::AND},
-            {"or", token_type::OR},
+            {"&&", token_type::AND},
+            {"||", token_type::OR},
             {"else", token_type::ELSE},
             {"false", token_type::FALSE},
             {"for", token_type::FOR},

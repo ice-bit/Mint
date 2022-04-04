@@ -34,7 +34,7 @@ You can either use Mint by the interactive REPL or by providing a source file. D
 ### FizzBuzz
 ```javascript
 for(let i = 0; i <= 100; i = i + 1) {
-    if((i % 3 == 0) and (i % 5 == 0)) print "FizzBuzz";
+    if((i % 3 == 0) && (i % 5 == 0)) print "FizzBuzz";
     else if(i % 3 == 0) print "Fizz";
     else if(i % 5 == 0) print "Buzz";
 }
@@ -105,7 +105,7 @@ while(i < 5) {
 let sum = 0;
 
 for(let i = 0; i < 1000; i = i + 1) {
-    if((i % 3 == 0) or (i % 5 == 0)) sum = sum + i;
+    if((i % 3 == 0) || (i % 5 == 0)) sum = sum + i;
 }
 
 print "The sum of all the multiples of 3 or 5 below 1000 is:";
