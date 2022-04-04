@@ -2,9 +2,7 @@
 // Created by marco on 3/8/22.
 //
 
-#ifndef MINT_TOKEN_H
-#define MINT_TOKEN_H
-
+#pragma once
 #include <any>
 #include <string>
 #include <utility>
@@ -37,6 +35,3 @@ public:
     const std::string lexeme;
     const unsigned int line;
 };
-
-
-#endif //MINT_TOKEN_H

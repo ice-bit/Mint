@@ -2,9 +2,7 @@
 // Created by marco on 3/9/22.
 //
 
-#ifndef MINT_STMT_H
-#define MINT_STMT_H
-
+#pragma once
 #include <any>
 #include <memory>
 #include <utility>
@@ -131,4 +129,3 @@ struct While : Stmt, public std::enable_shared_from_this<While> {
     std::shared_ptr<Stmt> body;
 };
 
-#endif //MINT_STMT_H

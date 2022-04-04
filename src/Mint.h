@@ -2,9 +2,7 @@
 // Created by marco on 3/8/22.
 //
 
-#ifndef MINT_MINT_H
-#define MINT_MINT_H
-
+#pragma once
 #include <string>
 #include "Token.h"
 #include "RuntimeError.h"
@@ -24,4 +22,3 @@ private:
     static bool had_runtime_error;
 };
 
-#endif //MINT_MINT_H

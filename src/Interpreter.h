@@ -2,10 +2,7 @@
 // Created by marco on 3/9/22.
 //
 
-#ifndef MINT_INTERPRETER_H
-#define MINT_INTERPRETER_H
-
-
+#pragma once
 #include "Expr.h"
 #include "Stmt.h"
 #include "Environment.h"
@@ -51,6 +48,3 @@ private:
     std::shared_ptr<Environment> environment = globals;
     std::map<std::shared_ptr<Expr>, int> locals;
 };
-
-
-#endif //MINT_INTERPRETER_H

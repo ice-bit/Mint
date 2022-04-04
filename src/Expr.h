@@ -2,9 +2,7 @@
 // Created by marco on 3/8/22.
 //
 
-#ifndef MINT_EXPR_H
-#define MINT_EXPR_H
-
+#pragma once
 #include <any>
 #include <memory>
 #include <utility>
@@ -130,4 +128,3 @@ struct Call : Expr, public std::enable_shared_from_this<Call> {
     const std::vector<std::shared_ptr<Expr>> arguments;
 };
 
-#endif //MINT_EXPR_H

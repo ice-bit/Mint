@@ -2,9 +2,7 @@
 // Created by marco on 3/8/22.
 //
 
-#ifndef MINT_PARSER_H
-#define MINT_PARSER_H
-
+#pragma once 
 #include <memory>
 #include <vector>
 #include <stdexcept>
@@ -59,5 +57,3 @@ private:
     const std::vector<Token>& tokens;
     unsigned int current = 0;
 };
-
-#endif //MINT_PARSER_H

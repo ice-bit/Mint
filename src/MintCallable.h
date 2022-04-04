@@ -2,9 +2,7 @@
 // Created by marco on 3/10/22.
 //
 
-#ifndef MINT_MINTCALLABLE_H
-#define MINT_MINTCALLABLE_H
-
+#pragma once
 #include <any>
 #include <vector>
 #include <string>
@@ -17,6 +15,3 @@ public:
     virtual std::string to_string() = 0;
     virtual ~MintCallable() = default;
 };
-
-
-#endif //MINT_MINTCALLABLE_H

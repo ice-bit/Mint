@@ -2,9 +2,7 @@
 // Created by marco on 3/9/22.
 //
 
-#ifndef MINT_RUNTIMEERROR_H
-#define MINT_RUNTIMEERROR_H
-
+#pragma once
 #include <stdexcept>
 #include "Token.h"
 
@@ -18,4 +16,3 @@ public:
 };
 
 
-#endif //MINT_RUNTIMEERROR_H

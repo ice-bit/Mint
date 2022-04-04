@@ -2,9 +2,7 @@
 // Created by marco on 3/10/22.
 //
 
-#ifndef MINT_MINTFUNCTION_H
-#define MINT_MINTFUNCTION_H
-
+#pragma once
 #include <memory>
 #include <utility>
 #include "MintCallable.h"
@@ -30,4 +28,3 @@ private:
 };
 
 
-#endif //MINT_MINTFUNCTION_H

@@ -2,9 +2,7 @@
 // Created by marco on 3/9/22.
 //
 
-#ifndef MINT_ENVIRONMENT_H
-#define MINT_ENVIRONMENT_H
-
+#pragma once
 #include <memory>
 #include <any>
 #include <map>
@@ -26,4 +24,3 @@ private:
     std::map<std::string, std::any> values;
 };
 
-#endif //MINT_ENVIRONMENT_H

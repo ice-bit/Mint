@@ -4,7 +4,8 @@ set(HEADER_FILES
         )
 
 set(SOURCE_FILES
-        test_token.cpp)
+        test_token.cpp
+        test_lexer.cpp)
 
 add_executable(mint_test ${SOURCE_FILES} ${HEADER_FILES})
 

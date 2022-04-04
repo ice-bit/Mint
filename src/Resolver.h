@@ -2,10 +2,7 @@
 // Created by marco on 3/11/22.
 //
 
-#ifndef MINT_RESOLVER_H
-#define MINT_RESOLVER_H
-
-
+#pragma once
 #include "Stmt.h"
 #include "Interpreter.h"
 
@@ -51,5 +48,3 @@ private:
     function_type current_fun = function_type::NONE;
 };
 
-
-#endif //MINT_RESOLVER_H
