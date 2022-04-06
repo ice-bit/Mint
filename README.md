@@ -6,8 +6,9 @@
 
 Mint is a _tree-walking_ interpreter written in modern C++(>=17) for a subset of the Javascript programming language. The Mint interpreter is built using a simple _recursive descent_ parser. Mint shares a lot of functionalities with other high level programming languages, such as:
 - Dynamic typing;  
-- Support for basic arithmetical operations(`+`,`-`,`*`,`/`,`%`);  
-- Basic control structures(such as _if-then-else_, _while_ and _for_);  
+- Arithmetical operations(`+`,`-`,`*`,`/`,`%`);  
+- Bitwise operators(`|`, `&`, `^`, `~`, `<<`, `>>`);  
+- Control structures(such as _if-then-else_, _while_ and _for_);  
 - Function declaration;  
 - Function closures.  
 
@@ -15,11 +16,17 @@ The Mint interpreter is built following [Robert Nystrom's book: _"Crafting Inter
 
 
 ## Building
-Mint is written in modern C++ from scratch without using any additional library. In order to build it, you will need a modern C++ compiler(GCC, clang, MSVC, etc.) installed in your machine and a recent version of cmake(>= 3.12). Once installed, type the following commands(note: these instructions might not work under non-POSIX environments):
+Mint is written from scratch in modern C++ without using any additional library. In order to build it, you will need a modern C++ compiler(GCC, clang, MSVC, etc.) installed in your machine and a recent version of cmake(>= 3.12). Once installed, type the following commands(note: these instructions might not work under non-POSIX environments):
 ```sh
+$> git submodule update --init --recursive # Clone google-test framework
 $> mkdir build && cd build
 $> cmake ..
 $> make
+```
+
+This will compile both the interpreter and the unit tests. To run the tests, type:
+```sh
+$> ./tests/src/mint_test
 ```
 
 ## Usage
