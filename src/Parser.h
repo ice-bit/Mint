@@ -13,7 +13,7 @@
 class Parser {
 public:
     explicit Parser(const std::vector<Token>& tokens) : tokens(tokens) {};
-    std::vector<std::shared_ptr<Stmt>> parse();
+    auto parse() -> std::vector<std::shared_ptr<Stmt>>;
 private:
     class ParseError : public std::runtime_error {
     public:

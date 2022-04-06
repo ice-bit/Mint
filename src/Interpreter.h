@@ -9,7 +9,7 @@
 #include "MintCallable.h"
 
 class Interpreter : public ExprVisitor, public StmtVisitor {
-friend class MintFunction;
+    friend class MintFunction;
 public:
     Interpreter();
     auto interpret(const std::vector<std::shared_ptr<Stmt>>& statements) -> void;

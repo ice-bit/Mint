@@ -45,9 +45,12 @@ int main(int argc, char **argv) {
         }
     }
 
+    auto ret = 0;
+    if(execute_from_file)
+        ret = Mint::run_file(file_name);
+    else
+        Mint::run_prompt();
 
-    if(execute_from_file) Mint::run_file(file_name);
-    else Mint::run_prompt();
 
-    return 0;
+    return ret;
 }

@@ -7,7 +7,7 @@
 
 #include <cassert>
 
-std::vector<std::shared_ptr<Stmt>> Parser::parse() {
+auto Parser::parse() -> std::vector<std::shared_ptr<Stmt>> {
     std::vector<std::shared_ptr<Stmt>> statements;
 
     while(!is_at_end())

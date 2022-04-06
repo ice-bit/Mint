@@ -20,7 +20,7 @@ bool Mint::had_error = false;
 bool Mint::had_runtime_error = false;
 Interpreter interpreter;
 
-auto Mint::run_file(const std::string &filepath) -> void {
+auto Mint::run_file(const std::string &filepath) -> uint8_t {
     std::fstream source_file(filepath, std::ios::in | std::ios::binary);
     if(source_file.fail()) {
         std::cerr << "Cannot open source file \"" << filepath << "\"." << std::endl;
@@ -37,7 +37,8 @@ auto Mint::run_file(const std::string &filepath) -> void {
     if(had_runtime_error) exit_code = 70;
 
     source_file.close();
-    std::exit(exit_code);
+
+    return exit_code;
 }
 
 
