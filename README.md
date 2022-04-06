@@ -130,4 +130,4 @@ Mint is quite fast for a three-walking interpreter, below you can find a table w
 
 
 # License
-Copyright (c) Marco Cetica 2022 under MIT license. You can read the terms of the MIT license [here](https://choosealicense.com/licenses/mit/).  
+Copyright (c) Marco Cetica 2022 under GPLv3 license. You can read the terms of the GPLv3 license [here](https://choosealicense.com/licenses/gpl-3.0/).  
