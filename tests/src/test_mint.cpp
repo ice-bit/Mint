@@ -1,6 +1,3 @@
-//
-// Created by Marco Cetica on 05/04/22.
-//
 #include <fstream>
 #include "test_mint.h"
 #include "Token.h"

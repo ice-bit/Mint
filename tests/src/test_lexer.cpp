@@ -1,6 +1,3 @@
-//
-// Created by Marco Cetica on 04/04/22.
-//
 #include "gtest/gtest.h"
 #include "Lexer.h"
 

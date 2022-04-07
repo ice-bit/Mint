@@ -1,7 +1,3 @@
-//
-// Created by marco on 3/10/22.
-//
-
 #include "MintFunction.h"
 #include "Environment.h"
 #include "Interpreter.h"

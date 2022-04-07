@@ -1,7 +1,9 @@
-//
-// Created by Marco Cetica on 05/04/22.
-//
-
+/*
+ * Mint interpreter
+ * Developed by Marco Cetica (c) 2022
+ * Released under GPLv3
+ *
+ */
 #pragma once
 #include "Mint.h"
 #include "gtest/gtest.h"

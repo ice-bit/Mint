@@ -1,7 +1,3 @@
-//
-// Created by marco on 3/8/22.
-//
-
 #include "Token.h"
 
 auto Token::to_string() -> std::string const {

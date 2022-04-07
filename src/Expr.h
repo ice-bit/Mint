@@ -1,7 +1,9 @@
-//
-// Created by marco on 3/8/22.
-//
-
+/*
+ * Mint interpreter
+ * Developed by Marco Cetica (c) 2022
+ * Released under GPLv3
+ *
+ */
 #pragma once
 #include <any>
 #include <memory>
