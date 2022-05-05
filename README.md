@@ -1,7 +1,7 @@
 # Mint [![Build Status](https://app.travis-ci.com/ice-bit/Mint.svg?branch=master)](https://app.travis-ci.com/ice-bit/Mint) [![CodeFactor](https://www.codefactor.io/repository/github/ice-bit/mint/badge)](https://www.codefactor.io/repository/github/ice-bit/mint)
 
 <div align="center">
-    <img src=".mint.png" />
+    <img src=".mint.gif" />
 </div>
 
 Mint is a _tree-walking_ interpreter written in modern C++(>=17) for a subset of the Javascript programming language. The Mint interpreter is built using a simple _recursive descent_ parser. Mint shares a lot of functionalities with other high level programming languages, such as:

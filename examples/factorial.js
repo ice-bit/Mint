@@ -4,4 +4,4 @@ function fact(n) {
     return fact(n - 1) * n;
 }
 
-print fact(50); // 120
+print fact(5); // 120
